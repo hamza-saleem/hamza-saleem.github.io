@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'app_colors.dart';
+
+class ThemeNotifier extends ChangeNotifier {
+  ThemeMode _mode = ThemeMode.dark;
+
+  ThemeMode get mode => _mode;
+  bool get isDark => _mode == ThemeMode.dark;
+
+  void toggle() {
+    _mode = isDark ? ThemeMode.light : ThemeMode.dark;
+    notifyListeners();
+  }
+}
+
+ThemeNotifier themeNotifier(BuildContext context) =>
+    context.read<ThemeNotifier>();
+
+class AppTheme {
+  AppTheme._();
+
+  static ThemeData dark() => ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: KageMichiColors.darkBackground,
+        colorScheme: const ColorScheme.dark(
+          primary: KageMichiColors.crimson,
+          secondary: KageMichiColors.crimsonLight,
+          surface: KageMichiColors.darkSurface,
+          onSurface: KageMichiColors.darkTextPrimary,
+        ),
+        dividerColor: KageMichiColors.darkRule,
+        useMaterial3: true,
+      );
+
+  static ThemeData light() => ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: KageMichiColors.lightBackground,
+        colorScheme: const ColorScheme.light(
+          primary: KageMichiColors.crimson,
+          secondary: KageMichiColors.crimsonLight,
+          surface: KageMichiColors.lightSurface,
+          onSurface: KageMichiColors.lightTextPrimary,
+        ),
+        dividerColor: KageMichiColors.lightRule,
+        useMaterial3: true,
+      );
+}
+
+extension ThemeContext on BuildContext {
+  bool get isDark => Theme.of(this).brightness == Brightness.dark;
+
+  Color get bgColor => isDark
+      ? KageMichiColors.darkBackground
+      : KageMichiColors.lightBackground;
+
+  Color get surfaceColor =>
+      isDark ? KageMichiColors.darkSurface : KageMichiColors.lightSurface;
+
+  Color get cardColor =>
+      isDark ? KageMichiColors.darkCard : KageMichiColors.lightCard;
+
+  Color get ruleColor =>
+      isDark ? KageMichiColors.darkRule : KageMichiColors.lightRule;
+
+  Color get textPrimary => isDark
+      ? KageMichiColors.darkTextPrimary
+      : KageMichiColors.lightTextPrimary;
+
+  Color get textSecondary => isDark
+      ? KageMichiColors.darkTextSecondary
+      : KageMichiColors.lightTextSecondary;
+
+  Color get accent => KageMichiColors.crimson;
+}
