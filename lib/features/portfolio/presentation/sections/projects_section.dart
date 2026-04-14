@@ -34,34 +34,18 @@ class ProjectsSection extends StatelessWidget {
                   AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
             ),
             SizedBox(height: context.responsive(mobile: 28.0, desktop: 40.0)),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final useGrid = !context.isMobile;
-                const gap = 20.0;
-
-                if (useGrid) {
-                  final cardWidth = (constraints.maxWidth - gap) / 2;
-                  return Wrap(
-                    spacing: gap,
-                    runSpacing: gap,
-                    children: PortfolioData.projects
-                        .map((p) => SizedBox(
-                              width: cardWidth,
-                              child: _ProjectCard(project: p),
-                            ))
-                        .toList(),
-                  );
-                }
-
-                return Column(
-                  children: PortfolioData.projects
-                      .map((p) => Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: _ProjectCard(project: p),
-                          ))
-                      .toList(),
-                );
-              },
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: PortfolioData.projects.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: context.isMobile ? 1 : 2,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20,
+                mainAxisExtent: context.responsive(mobile: 260.0, desktop: 300.0),
+              ),
+              itemBuilder: (context, index) =>
+                  _ProjectCard(project: PortfolioData.projects[index]),
             ),
           ],
         ),
@@ -84,6 +68,7 @@ class _ProjectCard extends StatelessWidget {
     return HoverBuilder(
       builder: (context, hovered) => AnimatedContainer(
         duration: const Duration(milliseconds: 200),
+        width: double.infinity,
         padding: EdgeInsets.all(cardPad),
         decoration: BoxDecoration(
           color: context.cardColor,
