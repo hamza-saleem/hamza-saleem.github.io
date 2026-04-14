@@ -92,9 +92,7 @@ class ProjectsSection extends StatelessWidget {
                                   scrollController: scrollController,
                                   parallaxStrength: 0.2,
                                   invert: true,
-                                  child: _ProjectCard(
-                                    project: projects[i + 1],
-                                  ),
+                                  child: _ProjectCard(project: projects[i + 1]),
                                 ),
                               ),
                             ],
@@ -175,9 +173,7 @@ class _ProjectCard extends StatelessWidget {
               textAlign: TextAlign.center,
               style: AppTextStyles.heading2(context.textPrimary),
             ),
-            SizedBox(
-              height: context.responsive(mobile: 10.0, desktop: 12.0),
-            ),
+            SizedBox(height: context.responsive(mobile: 10.0, desktop: 12.0)),
             Text(
               p.description,
               textAlign: TextAlign.center,
@@ -185,38 +181,36 @@ class _ProjectCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
             ),
-            SizedBox(
-              height: context.responsive(mobile: 18.0, desktop: 24.0),
-            ),
+            SizedBox(height: context.responsive(mobile: 18.0, desktop: 24.0)),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               alignment: WrapAlignment.center,
               children: p.tags.map((t) => _Tag(label: t)).toList(),
             ),
-            SizedBox(
-              height: context.responsive(mobile: 18.0, desktop: 24.0),
-            ),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              alignment: WrapAlignment.center,
-              children: [
-                if (p.liveUrl != null)
-                  _SocialButton(
-                    icon: p.liveUrl!.contains('apps.apple.com')
-                        ? FontAwesomeIcons.apple
-                        : FontAwesomeIcons.steam,
-                    label: getButtonLabel(p.liveUrl!),
-                    onTap: () => launchSafely(p.liveUrl!),
-                  ),
-                if (p.githubUrl != null)
-                  _SocialButton(
-                    icon: FontAwesomeIcons.github,
-                    label: 'GitHub',
-                    onTap: () => launchSafely(p.githubUrl!),
-                  ),
-              ],
+            SizedBox(height: context.responsive(mobile: 18.0, desktop: 24.0)),
+            Expanded(
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                alignment: WrapAlignment.center,
+                children: [
+                  if (p.liveUrl != null)
+                    _SocialButton(
+                      icon: p.liveUrl!.contains('apps.apple.com')
+                          ? FontAwesomeIcons.apple
+                          : FontAwesomeIcons.steam,
+                      label: getButtonLabel(p.liveUrl!),
+                      onTap: () => launchSafely(p.liveUrl!),
+                    ),
+                  if (p.githubUrl != null)
+                    _SocialButton(
+                      icon: FontAwesomeIcons.github,
+                      label: 'GitHub',
+                      onTap: () => launchSafely(p.githubUrl!),
+                    ),
+                ],
+              ),
             ),
           ],
         ),
