@@ -44,7 +44,7 @@ class ContactSection extends StatelessWidget {
                 style: AppTextStyles.body(context.textSecondary),
               ),
             ),
-            SizedBox(height: context.responsive(mobile: 28.0, desktop: 40.0)),
+            SizedBox(height: context.responsive(mobile: 32.0, desktop: 48.0)),
             if (isMobile)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -4,15 +4,18 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/text_measurer.dart';
 import '../../../../core/widgets/hover_builder.dart';
+import '../../../../core/widgets/parallax_widget.dart';
 import '../../../../core/widgets/section_fade.dart';
 import '../../data/portfolio_data.dart';
 
 class HeroSection extends StatefulWidget {
+  final ScrollController scrollController;
   final VoidCallback onViewWork;
   final VoidCallback onContact;
 
   const HeroSection({
     super.key,
+    required this.scrollController,
     required this.onViewWork,
     required this.onContact,
   });
@@ -53,19 +56,22 @@ class _HeroSectionState extends State<HeroSection> {
         context.responsive<double>(mobile: 22, tablet: 28, desktop: 36);
 
     return SectionFade(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: context.sectionPaddingH,
-          vertical: context.sectionPaddingV,
-        ),
-        child: Column(
+      child: ParallaxWidget(
+        scrollController: widget.scrollController,
+        parallaxStrength: 0.3,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: context.sectionPaddingH,
+            vertical: context.sectionPaddingV,
+          ),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '// hello, world',
               style: AppTextStyles.label(context.accent),
             ),
-            SizedBox(height: context.responsive(mobile: 12.0, desktop: 20.0)),
+            SizedBox(height: context.responsive(mobile: 12.0, desktop: 16.0)),
             Text(
               PortfolioData.name,
               style: AppTextStyles.display(context.textPrimary,
@@ -79,15 +85,15 @@ class _HeroSectionState extends State<HeroSection> {
               width: _nameWidth ?? 0,
               height: 2,
               margin: EdgeInsets.only(
-                  top: context.responsive(mobile: 6.0, desktop: 10.0)),
+                  top: context.responsive(mobile: 8.0, desktop: 12.0)),
               color: context.accent,
             ),
-            SizedBox(height: context.responsive(mobile: 8.0, desktop: 14.0)),
+            SizedBox(height: context.responsive(mobile: 12.0, desktop: 16.0)),
             Text(
               PortfolioData.title,
               style: AppTextStyles.heading1(context.accent, fontSize: h1Size),
             ),
-            SizedBox(height: context.responsive(mobile: 16.0, desktop: 28.0)),
+            SizedBox(height: context.responsive(mobile: 24.0, desktop: 32.0)),
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 560),
               child: Text(
@@ -102,7 +108,7 @@ class _HeroSectionState extends State<HeroSection> {
                 children: [
                   _PrimaryButton(
                       label: 'View Work', onTap: widget.onViewWork, fullWidth: true),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   _OutlineButton(
                       label: 'Get in Touch',
                       onTap: widget.onContact,
@@ -110,15 +116,19 @@ class _HeroSectionState extends State<HeroSection> {
                 ],
               )
             else
-              Wrap(
-                spacing: 16,
-                runSpacing: 12,
-                children: [
-                  _PrimaryButton(label: 'View Work', onTap: widget.onViewWork),
-                  _OutlineButton(label: 'Get in Touch', onTap: widget.onContact),
-                ],
+              Center(
+                child: Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _PrimaryButton(label: 'View Work', onTap: widget.onViewWork),
+                    _OutlineButton(label: 'Get in Touch', onTap: widget.onContact),
+                  ],
+                ),
               ),
           ],
+          ),
         ),
       ),
     );
@@ -142,7 +152,7 @@ class _PrimaryButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           width: fullWidth ? double.infinity : null,
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           decoration: BoxDecoration(
             color: hovered ? context.accentHover : context.accent,
           ),
@@ -174,7 +184,7 @@ class _OutlineButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           width: fullWidth ? double.infinity : null,
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           decoration: BoxDecoration(
             border: Border.all(
               color: hovered ? context.accent : context.ruleColor,

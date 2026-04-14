@@ -26,8 +26,9 @@ class PortfolioData {
           'Women\'s health & fitness app with 60K+ users and a 4.6★ iOS rating. '
           'Contributed a unified exercise logging system across all workout types, an app update management layer, '
           'auth module refactor, TDEE health integration, and resolved critical Sentry crash reports.',
-      tags: ['Flutter', 'GetX', 'Firebase', 'RevenueCat', 'Sentry', 'Hive'],
-      liveUrl: 'https://apps.apple.com/us/app/grounds-fitness-app-for-women/id6450262705',
+      tags: ['Flutter', 'GetX', 'Firebase', 'RevenueCat', 'Sentry'],
+      liveUrl:
+          'https://apps.apple.com/us/app/grounds-fitness-app-for-women/id6450262705',
       featured: true,
     ),
     ProjectModel(

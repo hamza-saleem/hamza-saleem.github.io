@@ -5,12 +5,15 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/url_utils.dart';
 import '../../../../core/widgets/hover_builder.dart';
+import '../../../../core/widgets/parallax_widget.dart';
 import '../../../../core/widgets/section_fade.dart';
 import '../../data/portfolio_data.dart';
 import '../../models/project_model.dart';
 
 class ProjectsSection extends StatelessWidget {
-  const ProjectsSection({super.key});
+  final ScrollController scrollController;
+
+  const ProjectsSection({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +34,12 @@ class ProjectsSection extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Selected Work',
-              style:
-                  AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
+              style: AppTextStyles.heading1(
+                context.textPrimary,
+                fontSize: h1Size,
+              ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 48),
             LayoutBuilder(
               builder: (context, constraints) {
                 final useGrid = !context.isMobile;
@@ -46,18 +51,33 @@ class ProjectsSection extends StatelessWidget {
                   for (var i = 0; i < projects.length; i += 2) {
                     final hasSecond = i + 1 < projects.length;
                     rows.add(
-                      IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(child: _ProjectCard(project: projects[i])),
-                            if (hasSecond) ...[
-                              const SizedBox(width: gap),
-                              Expanded(
-                                  child: _ProjectCard(project: projects[i + 1])),
-                            ] else
-                              const Expanded(child: SizedBox()),
-                          ],
+                      Center(
+                        child: IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: ParallaxCard(
+                                  scrollController: scrollController,
+                                  parallaxStrength: 0.2,
+                                  child: _ProjectCard(project: projects[i]),
+                                ),
+                              ),
+                              if (hasSecond) ...[
+                                const SizedBox(width: gap),
+                                Flexible(
+                                  child: ParallaxCard(
+                                    scrollController: scrollController,
+                                    parallaxStrength: 0.2,
+                                    child: _ProjectCard(
+                                      project: projects[i + 1],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -70,10 +90,12 @@ class ProjectsSection extends StatelessWidget {
 
                 return Column(
                   children: projects
-                      .map((p) => Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: _ProjectCard(project: p),
-                          ))
+                      .map(
+                        (p) => Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: _ProjectCard(project: p),
+                        ),
+                      )
                       .toList(),
                 );
               },
@@ -94,7 +116,7 @@ class _ProjectCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = project;
 
-    String _getButtonLabel(String url) {
+    String getButtonLabel(String url) {
       if (url.contains('apps.apple.com')) return 'View on App Store';
       if (url.contains('steampowered.com')) return 'View on Steam';
       if (url.contains('github.com')) return 'View on GitHub';
@@ -114,56 +136,68 @@ class _ProjectCard extends StatelessWidget {
           ),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: Text(
-                p.title,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.heading2(context.textPrimary),
+            SizedBox(
+              height: 60,
+              child: Center(
+                child: Text(
+                  p.title,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.heading2(context.textPrimary),
+                ),
               ),
             ),
-            const SizedBox(height: 10),
-            Center(
-              child: Text(
-                p.description,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.body(context.textSecondary),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 4,
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 80,
+              child: Center(
+                child: Text(
+                  p.description,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body(context.textSecondary),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            Center(
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                alignment: WrapAlignment.center,
-                children: p.tags.map((t) => _Tag(label: t)).toList(),
+            const SizedBox(height: 24),
+            SizedBox(
+              height: 40,
+              child: Center(
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: p.tags.map((t) => _Tag(label: t)).toList(),
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            Center(
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                alignment: WrapAlignment.center,
-                children: [
-                  if (p.liveUrl != null)
-                    _SocialButton(
-                      icon: p.liveUrl!.contains('apps.apple.com')
-                          ? FontAwesomeIcons.apple
-                          : FontAwesomeIcons.steam,
-                      label: _getButtonLabel(p.liveUrl!),
-                      onTap: () => launchSafely(p.liveUrl!),
-                    ),
-                  if (p.githubUrl != null)
-                    _SocialButton(
-                      icon: FontAwesomeIcons.github,
-                      label: 'GitHub',
-                      onTap: () => launchSafely(p.githubUrl!),
-                    ),
-                ],
+            const SizedBox(height: 24),
+            SizedBox(
+              height: 40,
+              child: Center(
+                child: Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    if (p.liveUrl != null)
+                      _SocialButton(
+                        icon: p.liveUrl!.contains('apps.apple.com')
+                            ? FontAwesomeIcons.apple
+                            : FontAwesomeIcons.steam,
+                        label: getButtonLabel(p.liveUrl!),
+                        onTap: () => launchSafely(p.liveUrl!),
+                      ),
+                    if (p.githubUrl != null)
+                      _SocialButton(
+                        icon: FontAwesomeIcons.github,
+                        label: 'GitHub',
+                        onTap: () => launchSafely(p.githubUrl!),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -199,7 +233,9 @@ class _SocialButton extends StatelessWidget {
               width: 1.5,
             ),
             borderRadius: BorderRadius.circular(6),
-            color: hovered ? context.accent.withOpacity(0.1) : Colors.transparent,
+            color: hovered
+                ? context.accent.withValues(alpha: 0.1)
+                : Colors.transparent,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -232,7 +268,7 @@ class _Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         border: Border.all(color: context.ruleColor, width: 1),
       ),

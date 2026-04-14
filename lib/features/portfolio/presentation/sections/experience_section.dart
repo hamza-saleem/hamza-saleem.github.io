@@ -77,7 +77,7 @@ class _TimelineItem extends StatelessWidget {
               child: Container(
                 width: 10,
                 height: 10,
-                margin: const EdgeInsets.only(top: 4),
+                margin: const EdgeInsets.only(top: 8),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: entry.isCurrent ? context.accent : context.ruleColor,
@@ -93,7 +93,7 @@ class _TimelineItem extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(bottom: isLast ? 0 : 36),
+                padding: EdgeInsets.only(bottom: isLast ? 0 : 32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -103,17 +103,17 @@ class _TimelineItem extends StatelessWidget {
                         style: AppTextStyles.heading2(context.textPrimary,
                             fontSize: h2Size),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 8),
                       Text(entry.company,
                           style: AppTextStyles.body(context.accent)),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Text(entry.period,
                               style: AppTextStyles.caption(
                                   context.textSecondary)),
                           if (entry.isCurrent) ...[
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 2),
@@ -139,7 +139,7 @@ class _TimelineItem extends StatelessWidget {
                                       context.textPrimary,
                                       fontSize: h2Size),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 8),
                                 Text(entry.company,
                                     style:
                                         AppTextStyles.body(context.accent)),
@@ -154,7 +154,7 @@ class _TimelineItem extends StatelessWidget {
                                   style: AppTextStyles.caption(
                                       context.textSecondary)),
                               if (entry.isCurrent) ...[
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 8),
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 6, vertical: 2),

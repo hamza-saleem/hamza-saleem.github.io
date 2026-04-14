@@ -63,13 +63,16 @@ class _PortfolioPageState extends State<PortfolioPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         HeroSection(
+                          scrollController: _scrollController,
                           onViewWork: () => scrollToKey(_projectsKey),
                           onContact: () => scrollToKey(_contactKey),
                         ),
                         const HorizontalRule(),
                         SizedBox(
                           key: _projectsKey,
-                          child: const ProjectsSection(),
+                          child: ProjectsSection(
+                            scrollController: _scrollController,
+                          ),
                         ),
                         const HorizontalRule(),
                         SizedBox(

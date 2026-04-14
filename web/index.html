@@ -20,21 +20,9 @@
   <link rel="manifest" href="manifest.json">
 
   <!--
-    Preload the same fonts Flutter uses into the browser's CSS font system.
-    This lets pretext measure text with the real font metrics (not system
-    fallbacks) when window._pretext.measureText() is called.
+    All fonts (Noto Sans, JetBrains Mono) are bundled as Flutter assets.
+    No external font loading needed.
   -->
-  <!--
-    Noto Serif JP is loaded here so the browser's CSS font system has it
-    available for pretext canvas measurement (hero name underline).
-    JetBrains Mono is bundled as a Flutter asset and needs no CSS preload.
-  -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&display=swap"
-    rel="stylesheet"
-  >
 
   <!--
     pretext bridge — imports the ESM package from jsDelivr and exposes

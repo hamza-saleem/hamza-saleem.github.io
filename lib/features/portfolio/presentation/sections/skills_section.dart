@@ -31,35 +31,38 @@ class SkillsSection extends StatelessWidget {
               style:
                   AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
             ),
-            SizedBox(height: context.responsive(mobile: 28.0, desktop: 40.0)),
+            SizedBox(height: context.responsive(mobile: 32.0, desktop: 48.0)),
             LayoutBuilder(
               builder: (context, constraints) {
                 final entries = PortfolioData.skills.entries.toList();
                 final useGrid = !context.isMobile;
-                const gap = 40.0;
+                const gap = 32.0;
 
                 if (useGrid) {
                   final colWidth = (constraints.maxWidth - gap) / 2;
-                  return Wrap(
-                    spacing: gap,
-                    runSpacing: 36,
-                    children: entries
-                        .map((e) => SizedBox(
-                              width: colWidth,
-                              child: _SkillGroup(
-                                category: e.key,
-                                items: e.value,
-                              ),
-                            ))
-                        .toList(),
+                  return Center(
+                    child: Wrap(
+                      spacing: gap,
+                      runSpacing: 32,
+                      alignment: WrapAlignment.center,
+                      children: entries
+                          .map((e) => SizedBox(
+                                width: colWidth,
+                                child: _SkillGroup(
+                                  category: e.key,
+                                  items: e.value,
+                                ),
+                              ))
+                          .toList(),
+                    ),
                   );
                 }
 
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: entries
                       .map((e) => Padding(
-                            padding: const EdgeInsets.only(bottom: 28),
+                            padding: const EdgeInsets.only(bottom: 24),
                             child: _SkillGroup(
                               category: e.key,
                               items: e.value,
@@ -100,10 +103,10 @@ class _SkillGroup extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
         Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 8,
+          runSpacing: 8,
           children: items.map((skill) => _SkillChip(label: skill)).toList(),
         ),
       ],
@@ -121,7 +124,7 @@ class _SkillChip extends StatelessWidget {
     return HoverBuilder(
       builder: (context, hovered) => AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: hovered
               ? context.accent.withValues(alpha: 0.1)
