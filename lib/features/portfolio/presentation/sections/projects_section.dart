@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
@@ -33,19 +34,49 @@ class ProjectsSection extends StatelessWidget {
               style:
                   AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
             ),
-            SizedBox(height: context.responsive(mobile: 28.0, desktop: 40.0)),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: PortfolioData.projects.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: context.isMobile ? 1 : 2,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-                mainAxisExtent: context.responsive(mobile: 260.0, desktop: 300.0),
-              ),
-              itemBuilder: (context, index) =>
-                  _ProjectCard(project: PortfolioData.projects[index]),
+            const SizedBox(height: 40),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final useGrid = !context.isMobile;
+                const gap = 20.0;
+                final projects = PortfolioData.projects;
+
+                if (useGrid) {
+                  final rows = <Widget>[];
+                  for (var i = 0; i < projects.length; i += 2) {
+                    final hasSecond = i + 1 < projects.length;
+                    rows.add(
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(child: _ProjectCard(project: projects[i])),
+                            if (hasSecond) ...[
+                              const SizedBox(width: gap),
+                              Expanded(
+                                  child: _ProjectCard(project: projects[i + 1])),
+                            ] else
+                              const Expanded(child: SizedBox()),
+                          ],
+                        ),
+                      ),
+                    );
+                    if (i + 2 < projects.length) {
+                      rows.add(const SizedBox(height: gap));
+                    }
+                  }
+                  return Column(children: rows);
+                }
+
+                return Column(
+                  children: projects
+                      .map((p) => Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: _ProjectCard(project: p),
+                          ))
+                      .toList(),
+                );
+              },
             ),
           ],
         ),
@@ -62,14 +93,19 @@ class _ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = project;
-    final cardPad = context.responsive(mobile: 16.0, desktop: 28.0);
-    final h2Size = context.responsive<double>(mobile: 18, desktop: 22);
+
+    String _getButtonLabel(String url) {
+      if (url.contains('apps.apple.com')) return 'View on App Store';
+      if (url.contains('steampowered.com')) return 'View on Steam';
+      if (url.contains('github.com')) return 'View on GitHub';
+      return 'View Project';
+    }
 
     return HoverBuilder(
       builder: (context, hovered) => AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: double.infinity,
-        padding: EdgeInsets.all(cardPad),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: context.cardColor,
           border: Border.all(
@@ -80,50 +116,55 @@ class _ProjectCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                if (p.featured)
-                  Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    color: context.accent,
-                    child: Text(
-                      'FEATURED',
-                      style: AppTextStyles.caption(context.accentForeground),
-                    ),
-                  ),
-                const Spacer(),
-                if (p.githubUrl != null)
-                  _IconLink(
-                    icon: Icons.code,
-                    tooltip: 'GitHub',
-                    onTap: () => launchSafely(p.githubUrl!),
-                  ),
-                if (p.liveUrl != null) ...[
-                  const SizedBox(width: 8),
-                  _IconLink(
-                    icon: Icons.open_in_new,
-                    tooltip: 'Live',
-                    onTap: () => launchSafely(p.liveUrl!),
-                  ),
-                ],
-              ],
-            ),
-            const SizedBox(height: 14),
-            Text(
-              p.title,
-              style:
-                  AppTextStyles.heading2(context.textPrimary, fontSize: h2Size),
+            Center(
+              child: Text(
+                p.title,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.heading2(context.textPrimary),
+              ),
             ),
             const SizedBox(height: 10),
-            Text(p.description,
-                style: AppTextStyles.body(context.textSecondary)),
+            Center(
+              child: Text(
+                p.description,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(context.textSecondary),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 4,
+              ),
+            ),
             const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: p.tags.map((t) => _Tag(label: t)).toList(),
+            Center(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.center,
+                children: p.tags.map((t) => _Tag(label: t)).toList(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                alignment: WrapAlignment.center,
+                children: [
+                  if (p.liveUrl != null)
+                    _SocialButton(
+                      icon: p.liveUrl!.contains('apps.apple.com')
+                          ? FontAwesomeIcons.apple
+                          : FontAwesomeIcons.steam,
+                      label: _getButtonLabel(p.liveUrl!),
+                      onTap: () => launchSafely(p.liveUrl!),
+                    ),
+                  if (p.githubUrl != null)
+                    _SocialButton(
+                      icon: FontAwesomeIcons.github,
+                      label: 'GitHub',
+                      onTap: () => launchSafely(p.githubUrl!),
+                    ),
+                ],
+              ),
             ),
           ],
         ),
@@ -132,14 +173,14 @@ class _ProjectCard extends StatelessWidget {
   }
 }
 
-class _IconLink extends StatelessWidget {
+class _SocialButton extends StatelessWidget {
   final IconData icon;
-  final String tooltip;
+  final String label;
   final VoidCallback onTap;
 
-  const _IconLink({
+  const _SocialButton({
     required this.icon,
-    required this.tooltip,
+    required this.label,
     required this.onTap,
   });
 
@@ -147,14 +188,35 @@ class _IconLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return HoverBuilder(
       cursor: SystemMouseCursors.click,
-      builder: (context, hovered) => Tooltip(
-        message: tooltip,
-        child: GestureDetector(
-          onTap: onTap,
-          child: Icon(
-            icon,
-            size: 18,
-            color: hovered ? context.accent : context.textSecondary,
+      builder: (context, hovered) => GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: hovered ? context.accent : context.ruleColor,
+              width: 1.5,
+            ),
+            borderRadius: BorderRadius.circular(6),
+            color: hovered ? context.accent.withOpacity(0.1) : Colors.transparent,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 6,
+            children: [
+              FaIcon(
+                icon,
+                size: 14,
+                color: hovered ? context.accent : context.textSecondary,
+              ),
+              Text(
+                label,
+                style: AppTextStyles.caption(
+                  hovered ? context.accent : context.textSecondary,
+                ),
+              ),
+            ],
           ),
         ),
       ),

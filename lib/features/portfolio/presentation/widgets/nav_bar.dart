@@ -34,28 +34,17 @@ class NavBar extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: hPad, vertical: 14),
         child: Row(
           children: [
-            // Logo
+            // Logo - Name
             GestureDetector(
               onTap: () => scrollController.animateTo(
                 0,
                 duration: const Duration(milliseconds: 600),
                 curve: Curves.easeInOut,
               ),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '影',
-                      style: AppTextStyles.heading2(context.accent,
-                          fontSize: logoSize),
-                    ),
-                    TextSpan(
-                      text: 'Michi',
-                      style: AppTextStyles.heading2(context.textPrimary,
-                          fontSize: logoSize),
-                    ),
-                  ],
-                ),
+              child: Text(
+                'Hamza Saleem',
+                style: AppTextStyles.heading2(context.textPrimary,
+                    fontSize: logoSize),
               ),
             ),
             const Spacer(),

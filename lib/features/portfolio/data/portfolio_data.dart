@@ -27,6 +27,7 @@ class PortfolioData {
           'Contributed a unified exercise logging system across all workout types, an app update management layer, '
           'auth module refactor, TDEE health integration, and resolved critical Sentry crash reports.',
       tags: ['Flutter', 'GetX', 'Firebase', 'RevenueCat', 'Sentry', 'Hive'],
+      liveUrl: 'https://apps.apple.com/us/app/grounds-fitness-app-for-women/id6450262705',
       featured: true,
     ),
     ProjectModel(
@@ -35,24 +36,25 @@ class PortfolioData {
           'First-person psychological horror game with exploration, puzzle-solving, and dynamic greed mechanics. '
           'Built a checkpoint-based save system for player progression. Launching on Steam in 2027.',
       tags: ['Unreal Engine 5', 'C++', 'Blueprints'],
+      liveUrl: 'https://store.steampowered.com/app/4158810/Shadow_Hills_Manor/',
       featured: true,
     ),
-    ProjectModel(
-      title: 'Instagram Clone',
-      description:
-          'Full-featured social media app with feed, likes, image upload, user profiles, and search. '
-          'Built end-to-end during internship as a deep-dive into Flutter and Firebase.',
-      tags: ['Flutter', 'Firebase Auth', 'Firestore', 'Firebase Storage'],
-      featured: false,
-    ),
-    ProjectModel(
-      title: 'MindSling',
-      description:
-          'Online school platform with real-time class features, login flows, and Firebase integration. '
-          'Focused on mobile UI, REST API integration, and reusable component architecture.',
-      tags: ['Flutter', 'Firebase Auth', 'Firestore', 'REST APIs'],
-      featured: false,
-    ),
+    // ProjectModel(
+    //   title: 'Instagram Clone',
+    //   description:
+    //       'Full-featured social media app with feed, likes, image upload, user profiles, and search. '
+    //       'Built end-to-end during internship as a deep-dive into Flutter and Firebase.',
+    //   tags: ['Flutter', 'Firebase Auth', 'Firestore', 'Firebase Storage'],
+    //   featured: false,
+    // ),
+    // ProjectModel(
+    //   title: 'MindSling',
+    //   description:
+    //       'Online school platform with real-time class features, login flows, and Firebase integration. '
+    //       'Focused on mobile UI, REST API integration, and reusable component architecture.',
+    //   tags: ['Flutter', 'Firebase Auth', 'Firestore', 'REST APIs'],
+    //   featured: false,
+    // ),
   ];
 
   static const Map<String, List<String>> skills = {
