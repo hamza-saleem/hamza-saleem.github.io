@@ -41,9 +41,7 @@ jobs:
           flutter build web \
             --release \
             --web-renderer canvaskit \
-            --base-href /portfolio-website/
-        # ⚠️  If your GitHub repo is named <username>.github.io (user site),
-        #     change --base-href to / instead of /portfolio-website/
+            --base-href /
 
       - name: Configure Pages
         uses: actions/configure-pages@v4
