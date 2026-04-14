@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../data/portfolio_data.dart';
-import '../models/project_model.dart';
-import '../theme/app_text_styles.dart';
-import '../theme/app_theme.dart';
-import '../utils/responsive.dart';
-import '../widgets/section_fade.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/utils/responsive.dart';
+import '../../../../core/widgets/section_fade.dart';
+import '../../data/portfolio_data.dart';
+import '../../models/project_model.dart';
 
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final h1Size = context.responsive<double>(
+      mobile: 28,
+      tablet: 32,
+      desktop: 36,
+    );
+
     return SectionFade(
       delay: const Duration(milliseconds: 100),
       child: Padding(
@@ -23,19 +29,17 @@ class ProjectsSection extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Selected Work',
-              style: AppTextStyles.heading1(context.textPrimary),
+              style:
+                  AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
             ),
-            const SizedBox(height: 40),
-            // LayoutBuilder gives us the actual available width inside the
-            // constrained column — avoids the MediaQuery overshoot bug.
+            SizedBox(height: context.responsive(mobile: 28.0, desktop: 40.0)),
             LayoutBuilder(
               builder: (context, constraints) {
-                final availableWidth = constraints.maxWidth;
                 final useGrid = !context.isMobile;
                 const gap = 20.0;
 
                 if (useGrid) {
-                  final cardWidth = (availableWidth - gap) / 2;
+                  final cardWidth = (constraints.maxWidth - gap) / 2;
                   return Wrap(
                     spacing: gap,
                     runSpacing: gap,
@@ -85,7 +89,8 @@ class _ProjectCardState extends State<_ProjectCard> {
   @override
   Widget build(BuildContext context) {
     final p = widget.project;
-    final cardPad = context.responsive(mobile: 20.0, desktop: 28.0);
+    final cardPad = context.responsive(mobile: 16.0, desktop: 28.0);
+    final h2Size = context.responsive<double>(mobile: 18, desktop: 22);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
@@ -113,7 +118,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                     color: context.accent,
                     child: Text(
                       'FEATURED',
-                      style: AppTextStyles.caption(Colors.white),
+                      style: AppTextStyles.caption(context.accentForeground),
                     ),
                   ),
                 const Spacer(),
@@ -133,14 +138,16 @@ class _ProjectCardState extends State<_ProjectCard> {
                 ],
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             Text(
               p.title,
-              style: AppTextStyles.heading2(context.textPrimary),
+              style:
+                  AppTextStyles.heading2(context.textPrimary, fontSize: h2Size),
             ),
-            const SizedBox(height: 12),
-            Text(p.description, style: AppTextStyles.body(context.textSecondary)),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+            Text(p.description,
+                style: AppTextStyles.body(context.textSecondary)),
+            const SizedBox(height: 16),
             Wrap(
               spacing: 8,
               runSpacing: 8,

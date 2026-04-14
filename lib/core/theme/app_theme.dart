@@ -24,8 +24,8 @@ class AppTheme {
         brightness: Brightness.dark,
         scaffoldBackgroundColor: KageMichiColors.darkBackground,
         colorScheme: const ColorScheme.dark(
-          primary: KageMichiColors.crimson,
-          secondary: KageMichiColors.crimsonLight,
+          primary: KageMichiColors.sand,
+          secondary: KageMichiColors.sandHover,
           surface: KageMichiColors.darkSurface,
           onSurface: KageMichiColors.darkTextPrimary,
         ),
@@ -37,8 +37,8 @@ class AppTheme {
         brightness: Brightness.light,
         scaffoldBackgroundColor: KageMichiColors.lightBackground,
         colorScheme: const ColorScheme.light(
-          primary: KageMichiColors.crimson,
-          secondary: KageMichiColors.crimsonLight,
+          primary: KageMichiColors.sandDark,
+          secondary: KageMichiColors.sandDarkHover,
           surface: KageMichiColors.lightSurface,
           onSurface: KageMichiColors.lightTextPrimary,
         ),
@@ -50,9 +50,8 @@ class AppTheme {
 extension ThemeContext on BuildContext {
   bool get isDark => Theme.of(this).brightness == Brightness.dark;
 
-  Color get bgColor => isDark
-      ? KageMichiColors.darkBackground
-      : KageMichiColors.lightBackground;
+  Color get bgColor =>
+      isDark ? KageMichiColors.darkBackground : KageMichiColors.lightBackground;
 
   Color get surfaceColor =>
       isDark ? KageMichiColors.darkSurface : KageMichiColors.lightSurface;
@@ -71,5 +70,13 @@ extension ThemeContext on BuildContext {
       ? KageMichiColors.darkTextSecondary
       : KageMichiColors.lightTextSecondary;
 
-  Color get accent => KageMichiColors.crimson;
+  Color get accent =>
+      isDark ? KageMichiColors.sand : KageMichiColors.sandDark;
+
+  Color get accentHover =>
+      isDark ? KageMichiColors.sandHover : KageMichiColors.sandDarkHover;
+
+  Color get accentForeground => isDark
+      ? KageMichiColors.darkBackground
+      : KageMichiColors.lightBackground;
 }

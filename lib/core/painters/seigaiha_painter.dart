@@ -26,17 +26,17 @@ class SeigaihaPainter extends CustomPainter {
     final cols = (size.width / colSpacing).ceil() + 2;
     final rows = (size.height / rowSpacing).ceil() + 2;
 
+    final path = Path();
     for (int row = -1; row < rows; row++) {
       for (int col = -1; col < cols; col++) {
         final xOffset = (row % 2 == 0) ? 0.0 : r;
         final cx = col * colSpacing + xOffset;
         final cy = row * rowSpacing;
-
-        // Draw the upper half-circle (seigaiha arc)
         final rect = Rect.fromCircle(center: Offset(cx, cy), radius: r);
-        canvas.drawArc(rect, math.pi, math.pi, false, paint);
+        path.addArc(rect, math.pi, math.pi);
       }
     }
+    canvas.drawPath(path, paint);
   }
 
   @override
@@ -55,11 +55,15 @@ class SeigaihaBackground extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: CustomPaint(
-            painter: SeigaihaPainter(
-              color: isDark ? Colors.white : Colors.black,
-              opacity: isDark ? 0.035 : 0.06,
-              scale: 36,
+          child: RepaintBoundary(
+            child: CustomPaint(
+              isComplex: true,
+              willChange: false,
+              painter: SeigaihaPainter(
+                color: isDark ? Colors.white : Colors.black,
+                opacity: isDark ? 0.035 : 0.06,
+                scale: 36,
+              ),
             ),
           ),
         ),

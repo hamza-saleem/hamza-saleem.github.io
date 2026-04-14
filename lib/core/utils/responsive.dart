@@ -7,7 +7,7 @@ class Breakpoints {
 }
 
 extension ResponsiveContext on BuildContext {
-  double get screenWidth => MediaQuery.of(this).size.width;
+  double get screenWidth => MediaQuery.sizeOf(this).width;
 
   bool get isMobile => screenWidth < Breakpoints.mobile;
   bool get isTablet =>

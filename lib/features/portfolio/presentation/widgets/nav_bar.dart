@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
-import '../theme/app_theme.dart';
-import '../utils/responsive.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/utils/responsive.dart';
 
 class NavBar extends StatelessWidget {
   final Map<String, GlobalKey> sectionKeys;
@@ -30,6 +29,8 @@ class NavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final notifier = context.watch<ThemeNotifier>();
     final hPad = context.responsive(mobile: 16.0, tablet: 24.0, desktop: 32.0);
+    final logoSize =
+        context.responsive<double>(mobile: 18.0, desktop: 24.0);
 
     return Container(
       color: context.bgColor.withValues(alpha: 0.92),
@@ -54,29 +55,30 @@ class NavBar extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '影',
-                      style: AppTextStyles.heading2(KageMichiColors.crimson),
+                      style: AppTextStyles.heading2(context.accent,
+                          fontSize: logoSize),
                     ),
                     TextSpan(
                       text: 'Michi',
-                      style: AppTextStyles.heading2(context.textPrimary),
+                      style: AppTextStyles.heading2(context.textPrimary,
+                          fontSize: logoSize),
                     ),
                   ],
                 ),
               ),
             ),
             const Spacer(),
-            // Desktop nav links
             if (context.isDesktop) ...[
               _NavLink('Projects', () => _scrollTo(sectionKeys['projects']!)),
               const SizedBox(width: 28),
               _NavLink('Skills', () => _scrollTo(sectionKeys['skills']!)),
               const SizedBox(width: 28),
-              _NavLink('Experience', () => _scrollTo(sectionKeys['experience']!)),
+              _NavLink(
+                  'Experience', () => _scrollTo(sectionKeys['experience']!)),
               const SizedBox(width: 28),
               _NavLink('Contact', () => _scrollTo(sectionKeys['contact']!)),
               const SizedBox(width: 16),
             ],
-            // Theme toggle
             IconButton(
               onPressed: notifier.toggle,
               icon: Icon(
@@ -88,7 +90,6 @@ class NavBar extends StatelessWidget {
               ),
               tooltip: notifier.isDark ? 'Light mode' : 'Dark mode',
             ),
-            // Mobile/tablet hamburger
             if (!context.isDesktop)
               _MobileMenu(sectionKeys: sectionKeys, scrollTo: _scrollTo),
           ],
@@ -122,7 +123,7 @@ class _NavLinkState extends State<_NavLink> {
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 150),
           style: AppTextStyles.navItem(
-            _hovered ? KageMichiColors.crimson : context.textSecondary,
+            _hovered ? context.accent : context.textSecondary,
           ),
           child: Text(widget.label),
         ),

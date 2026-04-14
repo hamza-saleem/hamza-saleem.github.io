@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../data/portfolio_data.dart';
-import '../theme/app_text_styles.dart';
-import '../theme/app_theme.dart';
-import '../utils/responsive.dart';
-import '../widgets/section_fade.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/utils/responsive.dart';
+import '../../../../core/widgets/section_fade.dart';
+import '../../data/portfolio_data.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -17,6 +18,11 @@ class ContactSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
+    final h1Size = context.responsive<double>(
+      mobile: 28,
+      tablet: 32,
+      desktop: 36,
+    );
 
     return SectionFade(
       delay: const Duration(milliseconds: 100),
@@ -29,41 +35,40 @@ class ContactSection extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               "Let's Connect",
-              style: AppTextStyles.heading1(context.textPrimary),
+              style:
+                  AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: isMobile ? double.infinity : 560,
-              ),
+              constraints:
+                  BoxConstraints(maxWidth: isMobile ? double.infinity : 560),
               child: Text(
                 "Have a project in mind, want to collaborate, or just want to say hello? "
                 "I'm always open to interesting conversations and new opportunities.",
                 style: AppTextStyles.body(context.textSecondary),
               ),
             ),
-            const SizedBox(height: 40),
-            // On mobile: stack links full-width. On tablet+: wrap side by side.
+            SizedBox(height: context.responsive(mobile: 28.0, desktop: 40.0)),
             if (isMobile)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _ContactLink(
-                    icon: Icons.code,
+                    icon: FontAwesomeIcons.github,
                     label: 'GitHub',
                     onTap: () => _launch(PortfolioData.githubUrl),
                     fullWidth: true,
                   ),
                   const SizedBox(height: 12),
                   _ContactLink(
-                    icon: Icons.work_outline,
+                    icon: FontAwesomeIcons.linkedinIn,
                     label: 'LinkedIn',
                     onTap: () => _launch(PortfolioData.linkedinUrl),
                     fullWidth: true,
                   ),
                   const SizedBox(height: 12),
                   _ContactLink(
-                    icon: Icons.mail_outline,
+                    icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
                     onTap: () => _launch('mailto:${PortfolioData.email}'),
                     fullWidth: true,
@@ -76,23 +81,23 @@ class ContactSection extends StatelessWidget {
                 runSpacing: 14,
                 children: [
                   _ContactLink(
-                    icon: Icons.code,
+                    icon: FontAwesomeIcons.github,
                     label: 'GitHub',
                     onTap: () => _launch(PortfolioData.githubUrl),
                   ),
                   _ContactLink(
-                    icon: Icons.work_outline,
+                    icon: FontAwesomeIcons.linkedinIn,
                     label: 'LinkedIn',
                     onTap: () => _launch(PortfolioData.linkedinUrl),
                   ),
                   _ContactLink(
-                    icon: Icons.mail_outline,
+                    icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
                     onTap: () => _launch('mailto:${PortfolioData.email}'),
                   ),
                 ],
               ),
-            const SizedBox(height: 72),
+            SizedBox(height: context.responsive(mobile: 48.0, desktop: 72.0)),
             Center(
               child: Column(
                 children: [
@@ -135,6 +140,8 @@ class _ContactLinkState extends State<_ContactLink> {
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = _hovered ? context.accent : context.textSecondary;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
@@ -158,12 +165,8 @@ class _ContactLinkState extends State<_ContactLink> {
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.start,
             children: [
-              Icon(
-                widget.icon,
-                size: 16,
-                color: _hovered ? context.accent : context.textSecondary,
-              ),
-              const SizedBox(width: 10),
+              FaIcon(widget.icon, size: 16, color: iconColor),
+              const SizedBox(width: 12),
               Flexible(
                 child: Text(
                   widget.label,

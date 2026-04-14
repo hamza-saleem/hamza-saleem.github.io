@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import '../data/portfolio_data.dart';
-import '../theme/app_text_styles.dart';
-import '../theme/app_theme.dart';
-import '../utils/responsive.dart';
-import '../widgets/section_fade.dart';
+import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/utils/responsive.dart';
+import '../../../../core/widgets/section_fade.dart';
+import '../../data/portfolio_data.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final h1Size = context.responsive<double>(
+      mobile: 28,
+      tablet: 32,
+      desktop: 36,
+    );
+
     return SectionFade(
       delay: const Duration(milliseconds: 100),
       child: Padding(
@@ -21,9 +27,10 @@ class SkillsSection extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Tech Stack',
-              style: AppTextStyles.heading1(context.textPrimary),
+              style:
+                  AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: context.responsive(mobile: 28.0, desktop: 40.0)),
             LayoutBuilder(
               builder: (context, constraints) {
                 final entries = PortfolioData.skills.entries.toList();
@@ -51,7 +58,7 @@ class SkillsSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: entries
                       .map((e) => Padding(
-                            padding: const EdgeInsets.only(bottom: 32),
+                            padding: const EdgeInsets.only(bottom: 28),
                             child: _SkillGroup(
                               category: e.key,
                               items: e.value,
@@ -92,7 +99,7 @@ class _SkillGroup extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         Wrap(
           spacing: 10,
           runSpacing: 10,
