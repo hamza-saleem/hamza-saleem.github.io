@@ -5,6 +5,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/scroll_utils.dart';
 import '../../../../core/widgets/hover_builder.dart';
+import '../../data/portfolio_data.dart';
 
 class NavBar extends StatelessWidget {
   final Map<String, GlobalKey> sectionKeys;
@@ -19,9 +20,6 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<ThemeNotifier>();
-    final hPad = context.responsive(mobile: 16.0, tablet: 24.0, desktop: 32.0);
-    final logoSize =
-        context.responsive<double>(mobile: 18.0, desktop: 24.0);
 
     return Container(
       color: context.bgColor.withValues(alpha: 0.92),
@@ -31,48 +29,74 @@ class NavBar extends StatelessWidget {
             bottom: BorderSide(color: context.ruleColor, width: 1),
           ),
         ),
-        padding: EdgeInsets.symmetric(horizontal: hPad, vertical: 14),
-        child: Row(
-          children: [
-            // Logo - Name
-            GestureDetector(
-              onTap: () => scrollController.animateTo(
-                0,
-                duration: const Duration(milliseconds: 600),
-                curve: Curves.easeInOut,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: context.sectionPaddingH,
+                vertical: 14,
               ),
-              child: Text(
-                'Hamza Saleem',
-                style: AppTextStyles.heading2(context.textPrimary,
-                    fontSize: logoSize),
+              child: Row(
+                children: [
+                  // Logo
+                  GestureDetector(
+                    onTap: () => scrollController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeInOut,
+                    ),
+                    child: Text(
+                      PortfolioData.name,
+                      style: AppTextStyles.heading2(
+                        context.textPrimary,
+                        fontSize: context.responsive<double>(
+                          mobile: 18.0,
+                          tablet: 20.0,
+                          desktop: 24.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  if (context.isDesktop) ...[
+                    _NavLink(
+                      'Projects',
+                      () => scrollToKey(sectionKeys['projects']!),
+                    ),
+                    const SizedBox(width: 28),
+                    _NavLink(
+                      'Skills',
+                      () => scrollToKey(sectionKeys['skills']!),
+                    ),
+                    const SizedBox(width: 28),
+                    _NavLink(
+                      'Experience',
+                      () => scrollToKey(sectionKeys['experience']!),
+                    ),
+                    const SizedBox(width: 28),
+                    _NavLink(
+                      'Contact',
+                      () => scrollToKey(sectionKeys['contact']!),
+                    ),
+                    const SizedBox(width: 16),
+                  ],
+                  IconButton(
+                    onPressed: notifier.toggle,
+                    icon: Icon(
+                      notifier.isDark
+                          ? Icons.wb_sunny_outlined
+                          : Icons.nightlight_outlined,
+                      color: context.textSecondary,
+                      size: 20,
+                    ),
+                    tooltip: notifier.isDark ? 'Light mode' : 'Dark mode',
+                  ),
+                  if (!context.isDesktop) _MobileMenu(sectionKeys: sectionKeys),
+                ],
               ),
             ),
-            const Spacer(),
-            if (context.isDesktop) ...[
-              _NavLink('Projects', () => scrollToKey(sectionKeys['projects']!)),
-              const SizedBox(width: 28),
-              _NavLink('Skills', () => scrollToKey(sectionKeys['skills']!)),
-              const SizedBox(width: 28),
-              _NavLink(
-                  'Experience', () => scrollToKey(sectionKeys['experience']!)),
-              const SizedBox(width: 28),
-              _NavLink('Contact', () => scrollToKey(sectionKeys['contact']!)),
-              const SizedBox(width: 16),
-            ],
-            IconButton(
-              onPressed: notifier.toggle,
-              icon: Icon(
-                notifier.isDark
-                    ? Icons.wb_sunny_outlined
-                    : Icons.nightlight_outlined,
-                color: context.textSecondary,
-                size: 20,
-              ),
-              tooltip: notifier.isDark ? 'Light mode' : 'Dark mode',
-            ),
-            if (!context.isDesktop)
-              _MobileMenu(sectionKeys: sectionKeys),
-          ],
+          ),
         ),
       ),
     );

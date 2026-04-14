@@ -38,11 +38,22 @@ class _HeroSectionState extends State<HeroSection> {
 
   Future<void> _measureName() async {
     if (!mounted) return;
-    final fontSize =
-        context.responsive<double>(mobile: 36, tablet: 48, desktop: 56);
+    final fontSize = context.responsive<double>(
+      mobile: 36,
+      tablet: 48,
+      desktop: 56,
+    );
     final result = await TextMeasurer.measure(
       text: PortfolioData.name,
       font: '700 ${fontSize.toInt()}px "Noto Serif JP"',
+    ).timeout(
+      const Duration(seconds: 3),
+      onTimeout: () {
+        debugPrint(
+          '[HeroSection] Text measurement timed out — underline will not render.',
+        );
+        return null;
+      },
     );
     if (!mounted || result == null) return;
     setState(() => _nameWidth = result.maxLineWidth);
@@ -50,10 +61,16 @@ class _HeroSectionState extends State<HeroSection> {
 
   @override
   Widget build(BuildContext context) {
-    final displaySize =
-        context.responsive<double>(mobile: 36, tablet: 48, desktop: 56);
-    final h1Size =
-        context.responsive<double>(mobile: 22, tablet: 28, desktop: 36);
+    final displaySize = context.responsive<double>(
+      mobile: 36,
+      tablet: 48,
+      desktop: 56,
+    );
+    final h1Size = context.responsive<double>(
+      mobile: 22,
+      tablet: 28,
+      desktop: 36,
+    );
 
     return SectionFade(
       child: ParallaxWidget(
@@ -65,69 +82,107 @@ class _HeroSectionState extends State<HeroSection> {
             vertical: context.sectionPaddingV,
           ),
           child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '// hello, world',
-              style: AppTextStyles.label(context.accent),
-            ),
-            SizedBox(height: context.responsive(mobile: 12.0, desktop: 16.0)),
-            Text(
-              PortfolioData.name,
-              style: AppTextStyles.display(context.textPrimary,
-                  fontSize: displaySize),
-            ),
-            // Accent underline — width driven by pretext measurement.
-            // Animates from 0 → measured width once fonts are ready.
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.easeOut,
-              width: _nameWidth ?? 0,
-              height: 2,
-              margin: EdgeInsets.only(
-                  top: context.responsive(mobile: 8.0, desktop: 12.0)),
-              color: context.accent,
-            ),
-            SizedBox(height: context.responsive(mobile: 12.0, desktop: 16.0)),
-            Text(
-              PortfolioData.title,
-              style: AppTextStyles.heading1(context.accent, fontSize: h1Size),
-            ),
-            SizedBox(height: context.responsive(mobile: 24.0, desktop: 32.0)),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 560),
-              child: Text(
-                PortfolioData.tagline,
-                style: AppTextStyles.body(context.textSecondary),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '// hello, world',
+                style: AppTextStyles.label(context.accent),
               ),
-            ),
-            SizedBox(height: context.responsive(mobile: 32.0, desktop: 48.0)),
-            if (context.isMobile)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _PrimaryButton(
-                      label: 'View Work', onTap: widget.onViewWork, fullWidth: true),
-                  const SizedBox(height: 16),
-                  _OutlineButton(
-                      label: 'Get in Touch',
-                      onTap: widget.onContact,
-                      fullWidth: true),
-                ],
-              )
-            else
-              Center(
-                child: Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    _PrimaryButton(label: 'View Work', onTap: widget.onViewWork),
-                    _OutlineButton(label: 'Get in Touch', onTap: widget.onContact),
-                  ],
+              SizedBox(
+                height: context.responsive(
+                  mobile: 12.0,
+                  tablet: 14.0,
+                  desktop: 16.0,
                 ),
               ),
-          ],
+              Text(
+                PortfolioData.name,
+                style: AppTextStyles.display(
+                  context.textPrimary,
+                  fontSize: displaySize,
+                ),
+              ),
+              // Accent underline — width driven by pretext measurement.
+              // Animates from 0 → measured width once fonts are ready.
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+                width: _nameWidth ?? 0,
+                height: 2,
+                margin: EdgeInsets.only(
+                  top: context.responsive(
+                    mobile: 8.0,
+                    tablet: 10.0,
+                    desktop: 12.0,
+                  ),
+                ),
+                color: context.accent,
+              ),
+              SizedBox(
+                height: context.responsive(
+                  mobile: 12.0,
+                  tablet: 14.0,
+                  desktop: 16.0,
+                ),
+              ),
+              Text(
+                PortfolioData.title,
+                style: AppTextStyles.heading1(context.accent, fontSize: h1Size),
+              ),
+              SizedBox(
+                height: context.responsive(
+                  mobile: 20.0,
+                  tablet: 24.0,
+                  desktop: 32.0,
+                ),
+              ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 560),
+                child: Text(
+                  PortfolioData.tagline,
+                  style: AppTextStyles.body(context.textSecondary),
+                ),
+              ),
+              SizedBox(
+                height: context.responsive(
+                  mobile: 32.0,
+                  tablet: 40.0,
+                  desktop: 48.0,
+                ),
+              ),
+              if (context.isMobile)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _PrimaryButton(
+                      label: 'View Work',
+                      onTap: widget.onViewWork,
+                      fullWidth: true,
+                    ),
+                    const SizedBox(height: 12),
+                    _OutlineButton(
+                      label: 'Get in Touch',
+                      onTap: widget.onContact,
+                      fullWidth: true,
+                    ),
+                  ],
+                )
+              else
+                Wrap(
+                  spacing: 16,
+                  runSpacing: 12,
+                  children: [
+                    _PrimaryButton(
+                      label: 'View Work',
+                      onTap: widget.onViewWork,
+                    ),
+                    _OutlineButton(
+                      label: 'Get in Touch',
+                      onTap: widget.onContact,
+                    ),
+                  ],
+                ),
+            ],
           ),
         ),
       ),
@@ -140,8 +195,11 @@ class _PrimaryButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool fullWidth;
 
-  const _PrimaryButton(
-      {required this.label, required this.onTap, this.fullWidth = false});
+  const _PrimaryButton({
+    required this.label,
+    required this.onTap,
+    this.fullWidth = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -152,13 +210,19 @@ class _PrimaryButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           width: fullWidth ? double.infinity : null,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: EdgeInsets.symmetric(
+            horizontal: context.responsive(mobile: 20.0, desktop: 24.0),
+            vertical: context.responsive(mobile: 10.0, desktop: 12.0),
+          ),
           decoration: BoxDecoration(
             color: hovered ? context.accentHover : context.accent,
           ),
           child: Text(
             label,
-            style: AppTextStyles.button(context.accentForeground),
+            style: AppTextStyles.button(
+              context.accentForeground,
+              fontSize: context.responsive(mobile: 12.0, desktop: 13.0),
+            ),
             textAlign: fullWidth ? TextAlign.center : TextAlign.start,
           ),
         ),
@@ -172,8 +236,11 @@ class _OutlineButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool fullWidth;
 
-  const _OutlineButton(
-      {required this.label, required this.onTap, this.fullWidth = false});
+  const _OutlineButton({
+    required this.label,
+    required this.onTap,
+    this.fullWidth = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +251,10 @@ class _OutlineButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           width: fullWidth ? double.infinity : null,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: EdgeInsets.symmetric(
+            horizontal: context.responsive(mobile: 20.0, desktop: 24.0),
+            vertical: context.responsive(mobile: 10.0, desktop: 12.0),
+          ),
           decoration: BoxDecoration(
             border: Border.all(
               color: hovered ? context.accent : context.ruleColor,
@@ -195,6 +265,7 @@ class _OutlineButton extends StatelessWidget {
             label,
             style: AppTextStyles.button(
               hovered ? context.accent : context.textSecondary,
+              fontSize: context.responsive(mobile: 12.0, desktop: 13.0),
             ),
             textAlign: fullWidth ? TextAlign.center : TextAlign.start,
           ),

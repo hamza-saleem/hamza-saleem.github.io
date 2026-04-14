@@ -61,7 +61,8 @@ class TextMeasurer {
         maxLineWidth: result.maxLineWidth,
         lineCount: result.lineCount,
       );
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[TextMeasurer] Failed to measure "$text" with font "$font": $e');
       return null;
     }
   }

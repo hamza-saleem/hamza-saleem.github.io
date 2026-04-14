@@ -25,7 +25,7 @@ class PortfolioData {
       description:
           'Women\'s health & fitness app with 60K+ users and a 4.6★ iOS rating. '
           'Contributed a unified exercise logging system across all workout types, an app update management layer, '
-          'auth module refactor, TDEE health integration, and resolved critical Sentry crash reports.',
+          'auth module refactor, and resolved critical Sentry crash reports.',
       tags: ['Flutter', 'GetX', 'Firebase', 'RevenueCat', 'Sentry'],
       liveUrl:
           'https://apps.apple.com/us/app/grounds-fitness-app-for-women/id6450262705',
@@ -40,22 +40,6 @@ class PortfolioData {
       liveUrl: 'https://store.steampowered.com/app/4158810/Shadow_Hills_Manor/',
       featured: true,
     ),
-    // ProjectModel(
-    //   title: 'Instagram Clone',
-    //   description:
-    //       'Full-featured social media app with feed, likes, image upload, user profiles, and search. '
-    //       'Built end-to-end during internship as a deep-dive into Flutter and Firebase.',
-    //   tags: ['Flutter', 'Firebase Auth', 'Firestore', 'Firebase Storage'],
-    //   featured: false,
-    // ),
-    // ProjectModel(
-    //   title: 'MindSling',
-    //   description:
-    //       'Online school platform with real-time class features, login flows, and Firebase integration. '
-    //       'Focused on mobile UI, REST API integration, and reusable component architecture.',
-    //   tags: ['Flutter', 'Firebase Auth', 'Firestore', 'REST APIs'],
-    //   featured: false,
-    // ),
   ];
 
   static const Map<String, List<String>> skills = {

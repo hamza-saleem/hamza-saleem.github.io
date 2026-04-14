@@ -7,7 +7,9 @@ class HorizontalRule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vPad = context.responsive(mobile: 40.0, tablet: 52.0, desktop: 64.0);
+    // Sections carry their own sectionPaddingV; this just provides a small
+    // visual buffer around the divider line itself.
+    final vPad = context.responsive(mobile: 8.0, tablet: 10.0, desktop: 12.0);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: vPad),
       child: Row(

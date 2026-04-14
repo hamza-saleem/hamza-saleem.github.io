@@ -20,30 +20,49 @@ class SkillsSection extends StatelessWidget {
     return SectionFade(
       delay: const Duration(milliseconds: 100),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.sectionPaddingH),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.sectionPaddingH,
+          vertical: context.sectionPaddingV,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('// skills', style: AppTextStyles.label(context.accent)),
-            const SizedBox(height: 12),
+            SizedBox(
+              height: context.responsive(
+                mobile: 12.0,
+                tablet: 12.0,
+                desktop: 14.0,
+              ),
+            ),
             Text(
               'Tech Stack',
-              style:
-                  AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
+              style: AppTextStyles.heading1(context.textPrimary,
+                  fontSize: h1Size),
             ),
-            SizedBox(height: context.responsive(mobile: 32.0, desktop: 48.0)),
+            SizedBox(
+              height: context.responsive(
+                mobile: 32.0,
+                tablet: 40.0,
+                desktop: 48.0,
+              ),
+            ),
             LayoutBuilder(
               builder: (context, constraints) {
                 final entries = PortfolioData.skills.entries.toList();
                 final useGrid = !context.isMobile;
-                const gap = 32.0;
+                final gap = context.responsive(
+                  mobile: 24.0,
+                  tablet: 28.0,
+                  desktop: 32.0,
+                );
 
                 if (useGrid) {
                   final colWidth = (constraints.maxWidth - gap) / 2;
                   return Center(
                     child: Wrap(
                       spacing: gap,
-                      runSpacing: 32,
+                      runSpacing: gap,
                       alignment: WrapAlignment.center,
                       children: entries
                           .map((e) => SizedBox(
@@ -62,7 +81,7 @@ class SkillsSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: entries
                       .map((e) => Padding(
-                            padding: const EdgeInsets.only(bottom: 24),
+                            padding: EdgeInsets.only(bottom: gap),
                             child: _SkillGroup(
                               category: e.key,
                               items: e.value,

@@ -23,18 +23,33 @@ class ContactSection extends StatelessWidget {
     return SectionFade(
       delay: const Duration(milliseconds: 100),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.sectionPaddingH),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.sectionPaddingH,
+          vertical: context.sectionPaddingV,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('// contact', style: AppTextStyles.label(context.accent)),
-            const SizedBox(height: 12),
+            SizedBox(
+              height: context.responsive(
+                mobile: 12.0,
+                tablet: 12.0,
+                desktop: 14.0,
+              ),
+            ),
             Text(
               "Let's Connect",
-              style:
-                  AppTextStyles.heading1(context.textPrimary, fontSize: h1Size),
+              style: AppTextStyles.heading1(context.textPrimary,
+                  fontSize: h1Size),
             ),
-            const SizedBox(height: 16),
+            SizedBox(
+              height: context.responsive(
+                mobile: 16.0,
+                tablet: 20.0,
+                desktop: 24.0,
+              ),
+            ),
             ConstrainedBox(
               constraints:
                   BoxConstraints(maxWidth: isMobile ? double.infinity : 560),
@@ -44,7 +59,13 @@ class ContactSection extends StatelessWidget {
                 style: AppTextStyles.body(context.textSecondary),
               ),
             ),
-            SizedBox(height: context.responsive(mobile: 32.0, desktop: 48.0)),
+            SizedBox(
+              height: context.responsive(
+                mobile: 32.0,
+                tablet: 40.0,
+                desktop: 48.0,
+              ),
+            ),
             if (isMobile)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,18 +76,23 @@ class ContactSection extends StatelessWidget {
                     onTap: () => launchSafely(PortfolioData.githubUrl),
                     fullWidth: true,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: context.responsive(mobile: 12.0, desktop: 12.0),
+                  ),
                   _ContactLink(
                     icon: FontAwesomeIcons.linkedinIn,
                     label: 'LinkedIn',
                     onTap: () => launchSafely(PortfolioData.linkedinUrl),
                     fullWidth: true,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: context.responsive(mobile: 12.0, desktop: 12.0),
+                  ),
                   _ContactLink(
                     icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
-                    onTap: () => launchSafely('mailto:${PortfolioData.email}'),
+                    onTap: () =>
+                        launchSafely('mailto:${PortfolioData.email}'),
                     fullWidth: true,
                   ),
                 ],
@@ -89,11 +115,18 @@ class ContactSection extends StatelessWidget {
                   _ContactLink(
                     icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
-                    onTap: () => launchSafely('mailto:${PortfolioData.email}'),
+                    onTap: () =>
+                        launchSafely('mailto:${PortfolioData.email}'),
                   ),
                 ],
               ),
-            SizedBox(height: context.responsive(mobile: 48.0, desktop: 72.0)),
+            SizedBox(
+              height: context.responsive(
+                mobile: 48.0,
+                tablet: 60.0,
+                desktop: 72.0,
+              ),
+            ),
             Center(
               child: Column(
                 children: [
@@ -136,7 +169,10 @@ class _ContactLink extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           width: fullWidth ? double.infinity : null,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: EdgeInsets.symmetric(
+            horizontal: context.responsive(mobile: 20.0, desktop: 24.0),
+            vertical: context.responsive(mobile: 14.0, desktop: 16.0),
+          ),
           decoration: BoxDecoration(
             border: Border.all(
               color: hovered ? context.accent : context.ruleColor,
@@ -160,6 +196,7 @@ class _ContactLink extends StatelessWidget {
                   label,
                   style: AppTextStyles.button(
                     hovered ? context.accent : context.textSecondary,
+                    fontSize: context.responsive(mobile: 12.0, desktop: 13.0),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -87,7 +87,6 @@ class _PortfolioPageState extends State<PortfolioPage> {
                           key: _contactKey,
                           child: const ContactSection(),
                         ),
-                        const SizedBox(height: 40),
                       ],
                     ),
                   ),

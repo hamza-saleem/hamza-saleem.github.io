@@ -26,12 +26,21 @@ class ProjectsSection extends StatelessWidget {
     return SectionFade(
       delay: const Duration(milliseconds: 100),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.sectionPaddingH),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.sectionPaddingH,
+          vertical: context.sectionPaddingV,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('// projects', style: AppTextStyles.label(context.accent)),
-            const SizedBox(height: 12),
+            SizedBox(
+              height: context.responsive(
+                mobile: 12.0,
+                tablet: 12.0,
+                desktop: 14.0,
+              ),
+            ),
             Text(
               'Selected Work',
               style: AppTextStyles.heading1(
@@ -39,11 +48,22 @@ class ProjectsSection extends StatelessWidget {
                 fontSize: h1Size,
               ),
             ),
-            const SizedBox(height: 48),
+            SizedBox(
+              height: context.responsive(
+                mobile: 32.0,
+                tablet: 40.0,
+                desktop: 48.0,
+              ),
+            ),
             LayoutBuilder(
               builder: (context, constraints) {
-                final useGrid = !context.isMobile;
-                const gap = 20.0;
+                // Grid only on desktop (1024px+); tablet and mobile use single column.
+                final useGrid = context.isDesktop;
+                final gap = context.responsive(
+                  mobile: 16.0,
+                  tablet: 16.0,
+                  desktop: 20.0,
+                );
                 final projects = PortfolioData.projects;
 
                 if (useGrid) {
@@ -51,38 +71,39 @@ class ProjectsSection extends StatelessWidget {
                   for (var i = 0; i < projects.length; i += 2) {
                     final hasSecond = i + 1 < projects.length;
                     rows.add(
-                      Center(
-                        child: IntrinsicHeight(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: ParallaxWidget(
+                                scrollController: scrollController,
+                                parallaxStrength: 0.2,
+                                invert: true,
+                                child: _ProjectCard(project: projects[i]),
+                              ),
+                            ),
+                            if (hasSecond) ...[
+                              SizedBox(width: gap),
                               Flexible(
-                                child: ParallaxCard(
+                                child: ParallaxWidget(
                                   scrollController: scrollController,
                                   parallaxStrength: 0.2,
-                                  child: _ProjectCard(project: projects[i]),
-                                ),
-                              ),
-                              if (hasSecond) ...[
-                                const SizedBox(width: gap),
-                                Flexible(
-                                  child: ParallaxCard(
-                                    scrollController: scrollController,
-                                    parallaxStrength: 0.2,
-                                    child: _ProjectCard(
-                                      project: projects[i + 1],
-                                    ),
+                                  invert: true,
+                                  child: _ProjectCard(
+                                    project: projects[i + 1],
                                   ),
                                 ),
-                              ],
+                              ),
                             ],
-                          ),
+                          ],
                         ),
                       ),
                     );
                     if (i + 2 < projects.length) {
-                      rows.add(const SizedBox(height: gap));
+                      rows.add(SizedBox(height: gap));
                     }
                   }
                   return Column(children: rows);
@@ -92,7 +113,13 @@ class ProjectsSection extends StatelessWidget {
                   children: projects
                       .map(
                         (p) => Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
+                          padding: EdgeInsets.only(
+                            bottom: context.responsive(
+                              mobile: 16.0,
+                              tablet: 20.0,
+                              desktop: 20.0,
+                            ),
+                          ),
                           child: _ProjectCard(project: p),
                         ),
                       )
@@ -115,6 +142,11 @@ class _ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = project;
+    final cardPad = context.responsive(
+      mobile: 20.0,
+      tablet: 22.0,
+      desktop: 24.0,
+    );
 
     String getButtonLabel(String url) {
       if (url.contains('apps.apple.com')) return 'View on App Store';
@@ -127,7 +159,7 @@ class _ProjectCard extends StatelessWidget {
       builder: (context, hovered) => AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: double.infinity,
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(cardPad),
         decoration: BoxDecoration(
           color: context.cardColor,
           border: Border.all(
@@ -138,67 +170,53 @@ class _ProjectCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 60,
-              child: Center(
-                child: Text(
-                  p.title,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.heading2(context.textPrimary),
-                ),
-              ),
+            Text(
+              p.title,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.heading2(context.textPrimary),
             ),
-            const SizedBox(height: 12),
             SizedBox(
-              height: 80,
-              child: Center(
-                child: Text(
-                  p.description,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.body(context.textSecondary),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 4,
-                ),
-              ),
+              height: context.responsive(mobile: 10.0, desktop: 12.0),
             ),
-            const SizedBox(height: 24),
-            SizedBox(
-              height: 40,
-              child: Center(
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  alignment: WrapAlignment.center,
-                  children: p.tags.map((t) => _Tag(label: t)).toList(),
-                ),
-              ),
+            Text(
+              p.description,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body(context.textSecondary),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 5,
             ),
-            const SizedBox(height: 24),
             SizedBox(
-              height: 40,
-              child: Center(
-                child: Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    if (p.liveUrl != null)
-                      _SocialButton(
-                        icon: p.liveUrl!.contains('apps.apple.com')
-                            ? FontAwesomeIcons.apple
-                            : FontAwesomeIcons.steam,
-                        label: getButtonLabel(p.liveUrl!),
-                        onTap: () => launchSafely(p.liveUrl!),
-                      ),
-                    if (p.githubUrl != null)
-                      _SocialButton(
-                        icon: FontAwesomeIcons.github,
-                        label: 'GitHub',
-                        onTap: () => launchSafely(p.githubUrl!),
-                      ),
-                  ],
-                ),
-              ),
+              height: context.responsive(mobile: 18.0, desktop: 24.0),
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: p.tags.map((t) => _Tag(label: t)).toList(),
+            ),
+            SizedBox(
+              height: context.responsive(mobile: 18.0, desktop: 24.0),
+            ),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              alignment: WrapAlignment.center,
+              children: [
+                if (p.liveUrl != null)
+                  _SocialButton(
+                    icon: p.liveUrl!.contains('apps.apple.com')
+                        ? FontAwesomeIcons.apple
+                        : FontAwesomeIcons.steam,
+                    label: getButtonLabel(p.liveUrl!),
+                    onTap: () => launchSafely(p.liveUrl!),
+                  ),
+                if (p.githubUrl != null)
+                  _SocialButton(
+                    icon: FontAwesomeIcons.github,
+                    label: 'GitHub',
+                    onTap: () => launchSafely(p.githubUrl!),
+                  ),
+              ],
             ),
           ],
         ),

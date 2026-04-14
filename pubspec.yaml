@@ -32,14 +32,8 @@ flutter:
           weight: 500
         - asset: assets/fonts/Poppins-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
     - family: Noto Serif JP
       fonts:
-        - asset: assets/fonts/NotoSerifJP-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/NotoSerifJP-Medium.ttf
-          weight: 500
         - asset: assets/fonts/NotoSerifJP-SemiBold.ttf
           weight: 600
         - asset: assets/fonts/NotoSerifJP-Bold.ttf

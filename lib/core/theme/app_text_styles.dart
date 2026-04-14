@@ -39,7 +39,7 @@ class AppTextStyles {
 
   static TextStyle body(Color color) => TextStyle(
         fontFamily: _bodyFamily,
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: FontWeight.w400,
         color: color,
         height: 1.7,
@@ -47,7 +47,7 @@ class AppTextStyles {
 
   static TextStyle label(Color color) => TextStyle(
         fontFamily: _bodyFamily,
-        fontSize: 12,
+        fontSize: 11,
         fontWeight: FontWeight.w500,
         color: color,
         letterSpacing: 1.5,
@@ -55,23 +55,23 @@ class AppTextStyles {
 
   static TextStyle caption(Color color) => TextStyle(
         fontFamily: _bodyFamily,
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: FontWeight.w400,
         color: color,
         height: 1.5,
       );
 
-  static TextStyle navItem(Color color) => TextStyle(
+  static TextStyle navItem(Color color, {double fontSize = 13}) => TextStyle(
         fontFamily: _bodyFamily,
-        fontSize: 13,
+        fontSize: fontSize,
         fontWeight: FontWeight.w500,
         color: color,
         letterSpacing: 0.8,
       );
 
-  static TextStyle button(Color color) => TextStyle(
+  static TextStyle button(Color color, {double fontSize = 13}) => TextStyle(
         fontFamily: _bodyFamily,
-        fontSize: 13,
+        fontSize: fontSize,
         fontWeight: FontWeight.w600,
         color: color,
         letterSpacing: 1.2,

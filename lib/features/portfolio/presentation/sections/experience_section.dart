@@ -20,19 +20,33 @@ class ExperienceSection extends StatelessWidget {
     return SectionFade(
       delay: const Duration(milliseconds: 100),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: context.sectionPaddingH),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.sectionPaddingH,
+          vertical: context.sectionPaddingV,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('// experience', style: AppTextStyles.label(context.accent)),
-            const SizedBox(height: 12),
+            SizedBox(
+              height: context.responsive(
+                mobile: 12.0,
+                tablet: 12.0,
+                desktop: 14.0,
+              ),
+            ),
             Text(
               'Work History',
               style: AppTextStyles.heading1(context.textPrimary,
                   fontSize: h1Size),
             ),
             SizedBox(
-                height: context.responsive(mobile: 32.0, desktop: 48.0)),
+              height: context.responsive(
+                mobile: 32.0,
+                tablet: 40.0,
+                desktop: 48.0,
+              ),
+            ),
             ...PortfolioData.experience
                 .asMap()
                 .entries
@@ -55,7 +69,16 @@ class _TimelineItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final h2Size = context.responsive<double>(mobile: 18, desktop: 22);
+    final h2Size = context.responsive<double>(
+      mobile: 18,
+      tablet: 20,
+      desktop: 22,
+    );
+    final itemGap = context.responsive(
+      mobile: 24.0,
+      tablet: 28.0,
+      desktop: 32.0,
+    );
     final isMobile = context.isMobile;
 
     return Stack(
@@ -93,7 +116,7 @@ class _TimelineItem extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(bottom: isLast ? 0 : 32),
+                padding: EdgeInsets.only(bottom: isLast ? 0 : itemGap),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
