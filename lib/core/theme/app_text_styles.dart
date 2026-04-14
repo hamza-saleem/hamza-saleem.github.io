@@ -4,11 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTextStyles {
   AppTextStyles._();
 
-  // Bundled font asset (declared in pubspec.yaml).
-  // Covers characters JetBrains Mono lacks: ★, ©, em-dash, CJK, etc.
+  // JetBrains Mono is bundled as a font asset in pubspec.yaml.
+  // Noto Sans (also bundled) covers glyphs JetBrains Mono lacks: ★, ©, em-dash, etc.
+  static const _monoFamily = 'JetBrains Mono';
   static const _notoSansFallback = ['Noto Sans'];
 
-  // ── Serif headings (Noto Serif JP — supports CJK + Latin) ──────────────────
+  // ── Serif headings (Noto Serif JP — network via google_fonts CDN) ───────────
+  // Kept on the CDN because the full CJK font file is ~13 MB; Google serves
+  // a tiny language-subsetted WOFF2 (~50–80 KB) instead.
 
   static TextStyle display(Color color, {double fontSize = 56}) =>
       GoogleFonts.notoSerifJp(
@@ -36,45 +39,50 @@ class AppTextStyles {
         height: 1.3,
       );
 
-  // ── Monospace body copy (JetBrains Mono + Noto Sans fallback) ──────────────
+  // ── Monospace body copy (JetBrains Mono — bundled asset) ───────────────────
 
-  static TextStyle body(Color color) =>
-      GoogleFonts.jetBrainsMono(
+  static TextStyle body(Color color) => TextStyle(
+        fontFamily: _monoFamily,
+        fontFamilyFallback: _notoSansFallback,
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: color,
         height: 1.7,
-      ).copyWith(fontFamilyFallback: _notoSansFallback);
+      );
 
-  static TextStyle label(Color color) =>
-      GoogleFonts.jetBrainsMono(
+  static TextStyle label(Color color) => TextStyle(
+        fontFamily: _monoFamily,
+        fontFamilyFallback: _notoSansFallback,
         fontSize: 12,
         fontWeight: FontWeight.w500,
         color: color,
         letterSpacing: 1.5,
-      ).copyWith(fontFamilyFallback: _notoSansFallback);
+      );
 
-  static TextStyle caption(Color color) =>
-      GoogleFonts.jetBrainsMono(
+  static TextStyle caption(Color color) => TextStyle(
+        fontFamily: _monoFamily,
+        fontFamilyFallback: _notoSansFallback,
         fontSize: 11,
         fontWeight: FontWeight.w400,
         color: color,
         height: 1.5,
-      ).copyWith(fontFamilyFallback: _notoSansFallback);
+      );
 
-  static TextStyle navItem(Color color) =>
-      GoogleFonts.jetBrainsMono(
+  static TextStyle navItem(Color color) => TextStyle(
+        fontFamily: _monoFamily,
+        fontFamilyFallback: _notoSansFallback,
         fontSize: 13,
         fontWeight: FontWeight.w500,
         color: color,
         letterSpacing: 0.8,
-      ).copyWith(fontFamilyFallback: _notoSansFallback);
+      );
 
-  static TextStyle button(Color color) =>
-      GoogleFonts.jetBrainsMono(
+  static TextStyle button(Color color) => TextStyle(
+        fontFamily: _monoFamily,
+        fontFamilyFallback: _notoSansFallback,
         fontSize: 13,
         fontWeight: FontWeight.w600,
         color: color,
         letterSpacing: 1.2,
-      ).copyWith(fontFamilyFallback: _notoSansFallback);
+      );
 }

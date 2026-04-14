@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../../core/widgets/hover_builder.dart';
 import '../../../../core/widgets/section_fade.dart';
 import '../../data/portfolio_data.dart';
 
@@ -110,39 +111,30 @@ class _SkillGroup extends StatelessWidget {
   }
 }
 
-class _SkillChip extends StatefulWidget {
+class _SkillChip extends StatelessWidget {
   final String label;
 
   const _SkillChip({required this.label});
 
   @override
-  State<_SkillChip> createState() => _SkillChipState();
-}
-
-class _SkillChipState extends State<_SkillChip> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: AnimatedContainer(
+    return HoverBuilder(
+      builder: (context, hovered) => AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         decoration: BoxDecoration(
-          color: _hovered
+          color: hovered
               ? context.accent.withValues(alpha: 0.1)
               : Colors.transparent,
           border: Border.all(
-            color: _hovered ? context.accent : context.ruleColor,
+            color: hovered ? context.accent : context.ruleColor,
             width: 1,
           ),
         ),
         child: Text(
-          widget.label,
+          label,
           style: AppTextStyles.caption(
-            _hovered ? context.accent : context.textSecondary,
+            hovered ? context.accent : context.textSecondary,
           ),
         ),
       ),

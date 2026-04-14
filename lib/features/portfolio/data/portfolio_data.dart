@@ -73,12 +73,7 @@ class PortfolioData {
       'Jira',
     ],
     'Game Dev': ['Unreal Engine 5', 'Unity', 'Blueprints', 'C++', 'C#'],
-    'Monitoring & Payments': [
-      'Sentry',
-      'Mixpanel',
-      'AppsFlyer',
-      'RevenueCat',
-    ],
+    'Monitoring & Payments': ['Sentry', 'Mixpanel', 'AppsFlyer', 'RevenueCat'],
     'Platforms': ['iOS', 'Android', 'Web'],
   };
 

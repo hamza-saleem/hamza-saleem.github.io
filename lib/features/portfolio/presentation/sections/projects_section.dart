@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../../core/utils/url_utils.dart';
+import '../../../../core/widgets/hover_builder.dart';
 import '../../../../core/widgets/section_fade.dart';
 import '../../data/portfolio_data.dart';
 import '../../models/project_model.dart';
@@ -69,39 +70,25 @@ class ProjectsSection extends StatelessWidget {
   }
 }
 
-class _ProjectCard extends StatefulWidget {
+class _ProjectCard extends StatelessWidget {
   final ProjectModel project;
 
   const _ProjectCard({required this.project});
 
   @override
-  State<_ProjectCard> createState() => _ProjectCardState();
-}
-
-class _ProjectCardState extends State<_ProjectCard> {
-  bool _hovered = false;
-
-  Future<void> _launch(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) launchUrl(uri);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final p = widget.project;
+    final p = project;
     final cardPad = context.responsive(mobile: 16.0, desktop: 28.0);
     final h2Size = context.responsive<double>(mobile: 18, desktop: 22);
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: AnimatedContainer(
+    return HoverBuilder(
+      builder: (context, hovered) => AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.all(cardPad),
         decoration: BoxDecoration(
           color: context.cardColor,
           border: Border.all(
-            color: _hovered ? context.accent : context.ruleColor,
+            color: hovered ? context.accent : context.ruleColor,
             width: 1,
           ),
         ),
@@ -126,14 +113,14 @@ class _ProjectCardState extends State<_ProjectCard> {
                   _IconLink(
                     icon: Icons.code,
                     tooltip: 'GitHub',
-                    onTap: () => _launch(p.githubUrl!),
+                    onTap: () => launchSafely(p.githubUrl!),
                   ),
                 if (p.liveUrl != null) ...[
                   const SizedBox(width: 8),
                   _IconLink(
                     icon: Icons.open_in_new,
                     tooltip: 'Live',
-                    onTap: () => _launch(p.liveUrl!),
+                    onTap: () => launchSafely(p.liveUrl!),
                   ),
                 ],
               ],
@@ -160,7 +147,7 @@ class _ProjectCardState extends State<_ProjectCard> {
   }
 }
 
-class _IconLink extends StatefulWidget {
+class _IconLink extends StatelessWidget {
   final IconData icon;
   final String tooltip;
   final VoidCallback onTap;
@@ -172,26 +159,17 @@ class _IconLink extends StatefulWidget {
   });
 
   @override
-  State<_IconLink> createState() => _IconLinkState();
-}
-
-class _IconLinkState extends State<_IconLink> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+    return HoverBuilder(
       cursor: SystemMouseCursors.click,
-      child: Tooltip(
-        message: widget.tooltip,
+      builder: (context, hovered) => Tooltip(
+        message: tooltip,
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: onTap,
           child: Icon(
-            widget.icon,
+            icon,
             size: 18,
-            color: _hovered ? context.accent : context.textSecondary,
+            color: hovered ? context.accent : context.textSecondary,
           ),
         ),
       ),

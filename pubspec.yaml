@@ -25,6 +25,14 @@ flutter:
   uses-material-design: true
 
   fonts:
+    - family: JetBrains Mono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/JetBrainsMono-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/JetBrainsMono-SemiBold.ttf
+          weight: 600
     - family: Noto Sans
       fonts:
         - asset: assets/fonts/NotoSans-Regular.ttf

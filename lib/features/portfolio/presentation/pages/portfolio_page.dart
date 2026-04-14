@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/painters/seigaiha_painter.dart';
+import '../../../../core/utils/scroll_utils.dart';
 import '../../../../core/widgets/horizontal_rule.dart';
+import '../../../../core/widgets/seigaiha_background.dart';
 import '../sections/contact_section.dart';
 import '../sections/experience_section.dart';
 import '../sections/hero_section.dart';
@@ -42,17 +43,6 @@ class _PortfolioPageState extends State<PortfolioPage> {
     super.dispose();
   }
 
-  void _scrollToKey(GlobalKey key) {
-    final ctx = key.currentContext;
-    if (ctx == null) return;
-    Scrollable.ensureVisible(
-      ctx,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOut,
-      alignment: 0.0,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,8 +63,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         HeroSection(
-                          onViewWork: () => _scrollToKey(_projectsKey),
-                          onContact: () => _scrollToKey(_contactKey),
+                          onViewWork: () => scrollToKey(_projectsKey),
+                          onContact: () => scrollToKey(_contactKey),
                         ),
                         const HorizontalRule(),
                         SizedBox(

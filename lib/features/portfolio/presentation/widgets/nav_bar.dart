@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../../core/utils/scroll_utils.dart';
+import '../../../../core/widgets/hover_builder.dart';
 
 class NavBar extends StatelessWidget {
   final Map<String, GlobalKey> sectionKeys;
@@ -13,17 +15,6 @@ class NavBar extends StatelessWidget {
     required this.sectionKeys,
     required this.scrollController,
   });
-
-  void _scrollTo(GlobalKey key) {
-    final ctx = key.currentContext;
-    if (ctx == null) return;
-    Scrollable.ensureVisible(
-      ctx,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOut,
-      alignment: 0.0,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +60,14 @@ class NavBar extends StatelessWidget {
             ),
             const Spacer(),
             if (context.isDesktop) ...[
-              _NavLink('Projects', () => _scrollTo(sectionKeys['projects']!)),
+              _NavLink('Projects', () => scrollToKey(sectionKeys['projects']!)),
               const SizedBox(width: 28),
-              _NavLink('Skills', () => _scrollTo(sectionKeys['skills']!)),
+              _NavLink('Skills', () => scrollToKey(sectionKeys['skills']!)),
               const SizedBox(width: 28),
               _NavLink(
-                  'Experience', () => _scrollTo(sectionKeys['experience']!)),
+                  'Experience', () => scrollToKey(sectionKeys['experience']!)),
               const SizedBox(width: 28),
-              _NavLink('Contact', () => _scrollTo(sectionKeys['contact']!)),
+              _NavLink('Contact', () => scrollToKey(sectionKeys['contact']!)),
               const SizedBox(width: 16),
             ],
             IconButton(
@@ -91,7 +82,7 @@ class NavBar extends StatelessWidget {
               tooltip: notifier.isDark ? 'Light mode' : 'Dark mode',
             ),
             if (!context.isDesktop)
-              _MobileMenu(sectionKeys: sectionKeys, scrollTo: _scrollTo),
+              _MobileMenu(sectionKeys: sectionKeys),
           ],
         ),
       ),
@@ -99,33 +90,24 @@ class NavBar extends StatelessWidget {
   }
 }
 
-class _NavLink extends StatefulWidget {
+class _NavLink extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
   const _NavLink(this.label, this.onTap);
 
   @override
-  State<_NavLink> createState() => _NavLinkState();
-}
-
-class _NavLinkState extends State<_NavLink> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+    return HoverBuilder(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: widget.onTap,
+      builder: (context, hovered) => GestureDetector(
+        onTap: onTap,
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 150),
           style: AppTextStyles.navItem(
-            _hovered ? context.accent : context.textSecondary,
+            hovered ? context.accent : context.textSecondary,
           ),
-          child: Text(widget.label),
+          child: Text(label),
         ),
       ),
     );
@@ -134,17 +116,16 @@ class _NavLinkState extends State<_NavLink> {
 
 class _MobileMenu extends StatelessWidget {
   final Map<String, GlobalKey> sectionKeys;
-  final void Function(GlobalKey) scrollTo;
 
-  const _MobileMenu({required this.sectionKeys, required this.scrollTo});
+  const _MobileMenu({required this.sectionKeys});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       icon: Icon(Icons.menu, color: context.textSecondary, size: 22),
       color: context.surfaceColor,
-      onSelected: (section) => scrollTo(sectionKeys[section]!),
-      itemBuilder: (_) => ['projects', 'skills', 'experience', 'contact']
+      onSelected: (section) => scrollToKey(sectionKeys[section]!),
+      itemBuilder: (_) => sectionKeys.keys
           .map(
             (s) => PopupMenuItem(
               value: s,

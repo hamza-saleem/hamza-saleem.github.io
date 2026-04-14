@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../../core/utils/url_utils.dart';
+import '../../../../core/widgets/hover_builder.dart';
 import '../../../../core/widgets/section_fade.dart';
 import '../../data/portfolio_data.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
-
-  Future<void> _launch(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) launchUrl(uri);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,21 +52,21 @@ class ContactSection extends StatelessWidget {
                   _ContactLink(
                     icon: FontAwesomeIcons.github,
                     label: 'GitHub',
-                    onTap: () => _launch(PortfolioData.githubUrl),
+                    onTap: () => launchSafely(PortfolioData.githubUrl),
                     fullWidth: true,
                   ),
                   const SizedBox(height: 12),
                   _ContactLink(
                     icon: FontAwesomeIcons.linkedinIn,
                     label: 'LinkedIn',
-                    onTap: () => _launch(PortfolioData.linkedinUrl),
+                    onTap: () => launchSafely(PortfolioData.linkedinUrl),
                     fullWidth: true,
                   ),
                   const SizedBox(height: 12),
                   _ContactLink(
                     icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
-                    onTap: () => _launch('mailto:${PortfolioData.email}'),
+                    onTap: () => launchSafely('mailto:${PortfolioData.email}'),
                     fullWidth: true,
                   ),
                 ],
@@ -83,17 +79,17 @@ class ContactSection extends StatelessWidget {
                   _ContactLink(
                     icon: FontAwesomeIcons.github,
                     label: 'GitHub',
-                    onTap: () => _launch(PortfolioData.githubUrl),
+                    onTap: () => launchSafely(PortfolioData.githubUrl),
                   ),
                   _ContactLink(
                     icon: FontAwesomeIcons.linkedinIn,
                     label: 'LinkedIn',
-                    onTap: () => _launch(PortfolioData.linkedinUrl),
+                    onTap: () => launchSafely(PortfolioData.linkedinUrl),
                   ),
                   _ContactLink(
                     icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
-                    onTap: () => _launch('mailto:${PortfolioData.email}'),
+                    onTap: () => launchSafely('mailto:${PortfolioData.email}'),
                   ),
                 ],
               ),
@@ -118,7 +114,7 @@ class ContactSection extends StatelessWidget {
   }
 }
 
-class _ContactLink extends StatefulWidget {
+class _ContactLink extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -132,46 +128,38 @@ class _ContactLink extends StatefulWidget {
   });
 
   @override
-  State<_ContactLink> createState() => _ContactLinkState();
-}
-
-class _ContactLinkState extends State<_ContactLink> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    final iconColor = _hovered ? context.accent : context.textSecondary;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+    return HoverBuilder(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: widget.onTap,
+      builder: (context, hovered) => GestureDetector(
+        onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          width: widget.fullWidth ? double.infinity : null,
+          width: fullWidth ? double.infinity : null,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           decoration: BoxDecoration(
             border: Border.all(
-              color: _hovered ? context.accent : context.ruleColor,
+              color: hovered ? context.accent : context.ruleColor,
               width: 1,
             ),
           ),
           child: Row(
-            mainAxisSize:
-                widget.fullWidth ? MainAxisSize.max : MainAxisSize.min,
-            mainAxisAlignment: widget.fullWidth
+            mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
+            mainAxisAlignment: fullWidth
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.start,
             children: [
-              FaIcon(widget.icon, size: 16, color: iconColor),
+              FaIcon(
+                icon,
+                size: 16,
+                color: hovered ? context.accent : context.textSecondary,
+              ),
               const SizedBox(width: 12),
               Flexible(
                 child: Text(
-                  widget.label,
+                  label,
                   style: AppTextStyles.button(
-                    _hovered ? context.accent : context.textSecondary,
+                    hovered ? context.accent : context.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
