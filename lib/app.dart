@@ -10,7 +10,7 @@ class KageMichiApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeMode = context.watch<ThemeNotifier>().mode;
     return MaterialApp(
-      title: 'KageMichi — Portfolio',
+      title: 'Hamza Saleem  — Portfolio',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
