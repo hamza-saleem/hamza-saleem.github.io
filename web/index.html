@@ -20,28 +20,26 @@
   <title>KageMichi — Portfolio</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Pre-load bundled fonts so splash text renders correctly -->
+  <!-- Preload the logo (WebP, with PNG fallback) for instant splash render -->
+  <link rel="preload" as="image" href="images/kagemichi-logo.webp" type="image/webp">
+
+  <!-- Splash fonts: Poppins only (swap so text renders immediately with system font) -->
+  <!-- NotoSerifJP (7.3 MB) is intentionally NOT loaded here — the splash falls back  -->
+  <!-- to Georgia, which is already the CSS fallback. Flutter loads NotoSerifJP later. -->
   <style>
-    @font-face {
-      font-family: 'Noto Serif JP';
-      src: url('assets/fonts/NotoSerifJP-Bold.ttf') format('truetype');
-      font-weight: 700;
-      font-style: normal;
-      font-display: block;
-    }
     @font-face {
       font-family: 'Poppins';
       src: url('assets/fonts/Poppins-Regular.ttf') format('truetype');
       font-weight: 400;
       font-style: normal;
-      font-display: block;
+      font-display: swap;
     }
     @font-face {
       font-family: 'Poppins';
       src: url('assets/fonts/Poppins-Medium.ttf') format('truetype');
       font-weight: 500;
       font-style: normal;
-      font-display: block;
+      font-display: swap;
     }
   </style>
 
@@ -232,13 +230,16 @@
   <div id="splash" aria-hidden="true">
     <div class="splash-content">
 
-      <!-- KageMichi Dev logo -->
-      <img
-        class="splash-logo"
-        src="images/kagemichi-logo.png"
-        alt="KageMichi Dev"
-        draggable="false"
-      />
+      <!-- KageMichi Dev logo — WebP served first, PNG fallback for older browsers -->
+      <picture>
+        <source srcset="images/kagemichi-logo.webp" type="image/webp">
+        <img
+          class="splash-logo"
+          src="images/kagemichi-logo.png"
+          alt="KageMichi Dev"
+          draggable="false"
+        />
+      </picture>
 
       <!-- Accent divider: appears after logo settles -->
       <div class="splash-rule"></div>
