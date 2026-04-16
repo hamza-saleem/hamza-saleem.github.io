@@ -16,7 +16,7 @@ class PortfolioData {
 
   static const String githubUrl = 'https://github.com/hamza-saleem';
   static const String linkedinUrl =
-      'https://linkedin.com/in/hamzasaleem-scapegoat';
+      'https://linkedin.com/in/hamza-saleem-scapegoat';
   static const String email = 'hamza.saleem87@gmail.com';
 
   static const List<ProjectModel> projects = [
