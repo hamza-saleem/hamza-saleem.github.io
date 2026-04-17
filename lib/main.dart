@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'app.dart';
-import 'core/theme/app_theme.dart';
+import 'app_bloc_observer.dart';
+import 'core/theme/cubit/theme_cubit.dart';
 
 void main() {
+  Bloc.observer = const AppBlocObserver();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
+    BlocProvider(
+      create: (_) => ThemeCubit(),
       child: const KageMichiApp(),
     ),
   );

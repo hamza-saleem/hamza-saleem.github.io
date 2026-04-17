@@ -46,9 +46,7 @@ class _ParallaxWidgetState extends State<ParallaxWidget> {
 
   @override
   void dispose() {
-    try {
-      widget.scrollController.removeListener(_updateOffset);
-    } catch (_) {}
+    widget.scrollController.removeListener(_updateOffset);
     _offsetNotifier.dispose();
     super.dispose();
   }

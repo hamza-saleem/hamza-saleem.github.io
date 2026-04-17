@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Tracks hover state and exposes it to [builder], eliminating the need for
-/// a dedicated StatefulWidget with a `_hovered` field in every hover widget.
+/// Tracks hover state and exposes it to [builder].
 ///
 /// Usage:
 /// ```dart
@@ -32,8 +31,12 @@ class _HoverBuilderState extends State<HoverBuilder> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+      onEnter: (_) {
+        if (!_hovered) setState(() => _hovered = true);
+      },
+      onExit: (_) {
+        if (_hovered) setState(() => _hovered = false);
+      },
       cursor: widget.cursor,
       child: widget.builder(context, _hovered),
     );

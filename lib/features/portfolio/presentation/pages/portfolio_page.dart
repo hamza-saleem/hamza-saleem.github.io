@@ -62,30 +62,42 @@ class _PortfolioPageState extends State<PortfolioPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        HeroSection(
-                          scrollController: _scrollController,
-                          onViewWork: () => scrollToKey(_projectsKey),
-                          onContact: () => scrollToKey(_contactKey),
-                        ),
-                        const HorizontalRule(),
-                        SizedBox(
-                          key: _projectsKey,
-                          child: ProjectsSection(
+                        RepaintBoundary(
+                          child: HeroSection(
                             scrollController: _scrollController,
+                            onViewWork: () => scrollToKey(_projectsKey),
+                            onContact: () => scrollToKey(_contactKey),
                           ),
                         ),
                         const HorizontalRule(),
-                        SizedBox(
-                            key: _skillsKey, child: const SkillsSection()),
-                        const HorizontalRule(),
-                        SizedBox(
-                          key: _experienceKey,
-                          child: const ExperienceSection(),
+                        RepaintBoundary(
+                          child: SizedBox(
+                            key: _projectsKey,
+                            child: ProjectsSection(
+                              scrollController: _scrollController,
+                            ),
+                          ),
                         ),
                         const HorizontalRule(),
-                        SizedBox(
-                          key: _contactKey,
-                          child: const ContactSection(),
+                        RepaintBoundary(
+                          child: SizedBox(
+                            key: _skillsKey,
+                            child: const SkillsSection(),
+                          ),
+                        ),
+                        const HorizontalRule(),
+                        RepaintBoundary(
+                          child: SizedBox(
+                            key: _experienceKey,
+                            child: const ExperienceSection(),
+                          ),
+                        ),
+                        const HorizontalRule(),
+                        RepaintBoundary(
+                          child: SizedBox(
+                            key: _contactKey,
+                            child: const ContactSection(),
+                          ),
                         ),
                       ],
                     ),

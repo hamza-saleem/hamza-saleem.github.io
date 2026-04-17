@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/cubit/theme_cubit.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/scroll_utils.dart';
 import '../../../../core/widgets/hover_builder.dart';
@@ -19,8 +20,6 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = context.watch<ThemeNotifier>();
-
     return Container(
       color: context.bgColor.withValues(alpha: 0.92),
       child: Container(
@@ -81,16 +80,21 @@ class NavBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 16),
                   ],
-                  IconButton(
-                    onPressed: notifier.toggle,
-                    icon: Icon(
-                      notifier.isDark
-                          ? Icons.wb_sunny_outlined
-                          : Icons.nightlight_outlined,
-                      color: context.textSecondary,
-                      size: 20,
-                    ),
-                    tooltip: notifier.isDark ? 'Light mode' : 'Dark mode',
+                  BlocBuilder<ThemeCubit, ThemeState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        onPressed: () =>
+                            context.read<ThemeCubit>().toggleTheme(),
+                        icon: Icon(
+                          state.isDark
+                              ? Icons.wb_sunny_outlined
+                              : Icons.nightlight_outlined,
+                          color: context.textSecondary,
+                          size: 20,
+                        ),
+                        tooltip: state.isDark ? 'Light mode' : 'Dark mode',
+                      );
+                    },
                   ),
                   if (!context.isDesktop) _MobileMenu(sectionKeys: sectionKeys),
                 ],

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:portfolio_website/app.dart';
-import 'package:portfolio_website/core/theme/app_theme.dart';
-import 'package:provider/provider.dart';
+import 'package:portfolio_website/core/theme/cubit/theme_cubit.dart';
 
 void main() {
   testWidgets('Portfolio app smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
-      ChangeNotifierProvider(
-        create: (_) => ThemeNotifier(),
+      BlocProvider(
+        create: (_) => ThemeCubit(),
         child: const KageMichiApp(),
       ),
     );
