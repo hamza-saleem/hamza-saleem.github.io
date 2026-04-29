@@ -202,7 +202,7 @@ class _ProjectCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               alignment: WrapAlignment.center,
-              children: p.tags.map((t) => _Tag(label: t)).toList(),
+              children: p.tags.map((t) => const _Tag(label: t)).toList(),
             ),
             SizedBox(height: context.responsive(mobile: 18.0, desktop: 24.0)),
             Expanded(

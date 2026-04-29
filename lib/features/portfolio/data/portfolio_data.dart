@@ -9,7 +9,7 @@ class PortfolioData {
   static const String tagline =
       'Building apps people rely on and games people remember.';
   static const String bio =
-      'Flutter developer with production experience on a 60K+ users health & fitness app. '
+      'Flutter developer with production experience on a 60K-user health & fitness app. '
       'I work across the full feature lifecycle — from Figma specs through controller logic to Firestore integration. '
       'Outside mobile, I build gameplay systems in Unreal Engine 5 at Know Buddy Games — currently developing Shadow Hills Manor, '
       'a psychological horror game heading to Steam — and run KageMichi Dev, a volunteer indie game studio. '
