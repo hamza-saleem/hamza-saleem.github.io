@@ -9,10 +9,11 @@ class PortfolioData {
   static const String tagline =
       'Building apps people rely on and games people remember.';
   static const String bio =
-      'Flutter developer with production experience on a cross-platform health & fitness app serving 60K+ users. '
+      'Flutter developer with production experience on a 60K+ users health & fitness app. '
       'I work across the full feature lifecycle — from Figma specs through controller logic to Firestore integration. '
-      'Outside of mobile, I develop gameplay systems in Unreal Engine 5 and Unity, and run KageMichi Dev, '
-      'a volunteer indie game studio. Focused on stable, maintainable code and continuously sharpening my engineering fundamentals.';
+      'Outside mobile, I build gameplay systems in Unreal Engine 5 at Know Buddy Games — currently developing Shadow Hills Manor, '
+      'a psychological horror game heading to Steam — and run KageMichi Dev, a volunteer indie game studio. '
+      'Focused on stable, maintainable code and continuously sharpening my engineering fundamentals.';
 
   static const String githubUrl = 'https://github.com/hamza-saleem';
   static const String linkedinUrl =

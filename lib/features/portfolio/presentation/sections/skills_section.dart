@@ -37,8 +37,10 @@ class SkillsSection extends StatelessWidget {
             ),
             Text(
               'Tech Stack',
-              style: AppTextStyles.heading1(context.textPrimary,
-                  fontSize: h1Size),
+              style: AppTextStyles.heading1(
+                context.textPrimary,
+                fontSize: h1Size,
+              ),
             ),
             SizedBox(
               height: context.responsive(
@@ -65,13 +67,15 @@ class SkillsSection extends StatelessWidget {
                       runSpacing: gap,
                       alignment: WrapAlignment.center,
                       children: entries
-                          .map((e) => SizedBox(
-                                width: colWidth,
-                                child: _SkillGroup(
-                                  category: e.key,
-                                  items: e.value,
-                                ),
-                              ))
+                          .map(
+                            (e) => SizedBox(
+                              width: colWidth,
+                              child: _SkillGroup(
+                                category: e.key,
+                                items: e.value,
+                              ),
+                            ),
+                          )
                           .toList(),
                     ),
                   );
@@ -80,13 +84,12 @@ class SkillsSection extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: entries
-                      .map((e) => Padding(
-                            padding: EdgeInsets.only(bottom: gap),
-                            child: _SkillGroup(
-                              category: e.key,
-                              items: e.value,
-                            ),
-                          ))
+                      .map(
+                        (e) => Padding(
+                          padding: EdgeInsets.only(bottom: gap),
+                          child: _SkillGroup(category: e.key, items: e.value),
+                        ),
+                      )
                       .toList(),
                 );
               },
@@ -140,9 +143,14 @@ class _SkillChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final duration = context.responsive<Duration>(
+      mobile: const Duration(milliseconds: 200),
+      tablet: const Duration(milliseconds: 175),
+      desktop: const Duration(milliseconds: 150),
+    );
     return HoverBuilder(
       builder: (context, hovered) => AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+        duration: duration,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: hovered

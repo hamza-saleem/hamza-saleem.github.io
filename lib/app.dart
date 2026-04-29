@@ -10,6 +10,7 @@ class KageMichiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
+      buildWhen: (previous, current) => previous.isDark != current.isDark,
       builder: (context, state) {
         return MaterialApp(
           title: 'Hamza Saleem  — Portfolio',

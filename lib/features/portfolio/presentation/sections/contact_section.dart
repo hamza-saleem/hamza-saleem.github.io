@@ -162,12 +162,17 @@ class _ContactLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final duration = context.responsive<Duration>(
+      mobile: const Duration(milliseconds: 200),
+      tablet: const Duration(milliseconds: 175),
+      desktop: const Duration(milliseconds: 150),
+    );
     return HoverBuilder(
       cursor: SystemMouseCursors.click,
       builder: (context, hovered) => GestureDetector(
         onTap: onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: duration,
           width: fullWidth ? double.infinity : null,
           padding: EdgeInsets.symmetric(
             horizontal: context.responsive(mobile: 20.0, desktop: 24.0),

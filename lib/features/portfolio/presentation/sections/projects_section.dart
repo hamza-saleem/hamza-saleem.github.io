@@ -67,38 +67,49 @@ class ProjectsSection extends StatelessWidget {
                 final projects = PortfolioData.projects;
 
                 if (useGrid) {
+                  // Responsive card height based on screen size and content.
+                  // Avoids IntrinsicHeight double-measurement during hover animations.
+                  final cardHeight = context.responsive<double?>(
+                    mobile: null,
+                    tablet: null,
+                    desktop: 380,
+                  );
+
                   final rows = <Widget>[];
                   for (var i = 0; i < projects.length; i += 2) {
                     final hasSecond = i + 1 < projects.length;
-                    rows.add(
-                      IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              child: ParallaxWidget(
-                                scrollController: scrollController,
-                                parallaxStrength: 0.2,
-                                invert: true,
-                                child: _ProjectCard(project: projects[i]),
-                              ),
-                            ),
-                            if (hasSecond) ...[
-                              SizedBox(width: gap),
-                              Flexible(
-                                child: ParallaxWidget(
-                                  scrollController: scrollController,
-                                  parallaxStrength: 0.2,
-                                  invert: true,
-                                  child: _ProjectCard(project: projects[i + 1]),
-                                ),
-                              ),
-                            ],
-                          ],
+                    final rowChild = Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: ParallaxWidget(
+                            scrollController: scrollController,
+                            parallaxStrength: 0.2,
+                            invert: true,
+                            child: _ProjectCard(project: projects[i]),
+                          ),
                         ),
-                      ),
+                        if (hasSecond) ...[
+                          SizedBox(width: gap),
+                          Flexible(
+                            child: ParallaxWidget(
+                              scrollController: scrollController,
+                              parallaxStrength: 0.2,
+                              invert: true,
+                              child: _ProjectCard(project: projects[i + 1]),
+                            ),
+                          ),
+                        ],
+                      ],
+                    );
+
+                    // On desktop, constrain height to avoid relayout during hover.
+                    rows.add(
+                      cardHeight != null
+                          ? SizedBox(height: cardHeight, child: rowChild)
+                          : rowChild,
                     );
                     if (i + 2 < projects.length) {
                       rows.add(SizedBox(height: gap));
@@ -145,6 +156,11 @@ class _ProjectCard extends StatelessWidget {
       tablet: 22.0,
       desktop: 24.0,
     );
+    final duration = context.responsive<Duration>(
+      mobile: const Duration(milliseconds: 250),
+      tablet: const Duration(milliseconds: 200),
+      desktop: const Duration(milliseconds: 200),
+    );
 
     String getButtonLabel(String url) {
       if (url.contains('apps.apple.com')) return 'View on App Store';
@@ -155,7 +171,7 @@ class _ProjectCard extends StatelessWidget {
 
     return HoverBuilder(
       builder: (context, hovered) => AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: duration,
         width: double.infinity,
         padding: EdgeInsets.all(cardPad),
         decoration: BoxDecoration(
@@ -232,12 +248,17 @@ class _SocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final duration = context.responsive<Duration>(
+      mobile: const Duration(milliseconds: 250),
+      tablet: const Duration(milliseconds: 200),
+      desktop: const Duration(milliseconds: 200),
+    );
     return HoverBuilder(
       cursor: SystemMouseCursors.click,
       builder: (context, hovered) => GestureDetector(
         onTap: onTap,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: duration,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             border: Border.all(
