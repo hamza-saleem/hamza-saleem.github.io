@@ -148,7 +148,7 @@ class ContactSection extends StatelessWidget {
 }
 
 class _ContactLink extends StatelessWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final VoidCallback onTap;
   final bool fullWidth;
