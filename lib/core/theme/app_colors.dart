@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class KageMichiColors {
-  KageMichiColors._();
+class HamzaSaleemColors {
+  HamzaSaleemColors._();
 
   // Dark mode — deep warm blacks, like the logo's shadowed background
   static const darkBackground = Color(0xFF141412);

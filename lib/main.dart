@@ -9,7 +9,7 @@ void main() {
   runApp(
     BlocProvider(
       create: (_) => ThemeCubit(),
-      child: const KageMichiApp(),
+      child: const HamzaSaleemApp(),
     ),
   );
 }

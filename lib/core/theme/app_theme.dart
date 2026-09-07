@@ -6,27 +6,27 @@ class AppTheme {
 
   static ThemeData dark() => ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: KageMichiColors.darkBackground,
+        scaffoldBackgroundColor: HamzaSaleemColors.darkBackground,
         colorScheme: const ColorScheme.dark(
-          primary: KageMichiColors.sand,
-          secondary: KageMichiColors.sandHover,
-          surface: KageMichiColors.darkSurface,
-          onSurface: KageMichiColors.darkTextPrimary,
+          primary: HamzaSaleemColors.sand,
+          secondary: HamzaSaleemColors.sandHover,
+          surface: HamzaSaleemColors.darkSurface,
+          onSurface: HamzaSaleemColors.darkTextPrimary,
         ),
-        dividerColor: KageMichiColors.darkRule,
+        dividerColor: HamzaSaleemColors.darkRule,
         useMaterial3: true,
       );
 
   static ThemeData light() => ThemeData(
         brightness: Brightness.light,
-        scaffoldBackgroundColor: KageMichiColors.lightBackground,
+        scaffoldBackgroundColor: HamzaSaleemColors.lightBackground,
         colorScheme: const ColorScheme.light(
-          primary: KageMichiColors.sandDark,
-          secondary: KageMichiColors.sandDarkHover,
-          surface: KageMichiColors.lightSurface,
-          onSurface: KageMichiColors.lightTextPrimary,
+          primary: HamzaSaleemColors.sandDark,
+          secondary: HamzaSaleemColors.sandDarkHover,
+          surface: HamzaSaleemColors.lightSurface,
+          onSurface: HamzaSaleemColors.lightTextPrimary,
         ),
-        dividerColor: KageMichiColors.lightRule,
+        dividerColor: HamzaSaleemColors.lightRule,
         useMaterial3: true,
       );
 }
@@ -35,32 +35,32 @@ extension ThemeContext on BuildContext {
   bool get isDark => Theme.of(this).brightness == Brightness.dark;
 
   Color get bgColor =>
-      isDark ? KageMichiColors.darkBackground : KageMichiColors.lightBackground;
+      isDark ? HamzaSaleemColors.darkBackground : HamzaSaleemColors.lightBackground;
 
   Color get surfaceColor =>
-      isDark ? KageMichiColors.darkSurface : KageMichiColors.lightSurface;
+      isDark ? HamzaSaleemColors.darkSurface : HamzaSaleemColors.lightSurface;
 
   Color get cardColor =>
-      isDark ? KageMichiColors.darkCard : KageMichiColors.lightCard;
+      isDark ? HamzaSaleemColors.darkCard : HamzaSaleemColors.lightCard;
 
   Color get ruleColor =>
-      isDark ? KageMichiColors.darkRule : KageMichiColors.lightRule;
+      isDark ? HamzaSaleemColors.darkRule : HamzaSaleemColors.lightRule;
 
   Color get textPrimary => isDark
-      ? KageMichiColors.darkTextPrimary
-      : KageMichiColors.lightTextPrimary;
+      ? HamzaSaleemColors.darkTextPrimary
+      : HamzaSaleemColors.lightTextPrimary;
 
   Color get textSecondary => isDark
-      ? KageMichiColors.darkTextSecondary
-      : KageMichiColors.lightTextSecondary;
+      ? HamzaSaleemColors.darkTextSecondary
+      : HamzaSaleemColors.lightTextSecondary;
 
   Color get accent =>
-      isDark ? KageMichiColors.sand : KageMichiColors.sandDark;
+      isDark ? HamzaSaleemColors.sand : HamzaSaleemColors.sandDark;
 
   Color get accentHover =>
-      isDark ? KageMichiColors.sandHover : KageMichiColors.sandDarkHover;
+      isDark ? HamzaSaleemColors.sandHover : HamzaSaleemColors.sandDarkHover;
 
   Color get accentForeground => isDark
-      ? KageMichiColors.darkBackground
-      : KageMichiColors.lightBackground;
+      ? HamzaSaleemColors.darkBackground
+      : HamzaSaleemColors.lightBackground;
 }

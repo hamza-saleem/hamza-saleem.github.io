@@ -9,7 +9,7 @@ void main() {
     await tester.pumpWidget(
       BlocProvider(
         create: (_) => ThemeCubit(),
-        child: const KageMichiApp(),
+        child: const HamzaSaleemApp(),
       ),
     );
     expect(find.byType(MaterialApp), findsOneWidget);

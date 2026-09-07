@@ -169,6 +169,30 @@ class _ProjectCard extends StatelessWidget {
       return 'View Project';
     }
 
+    Widget buildButtons() {
+      return Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        alignment: WrapAlignment.center,
+        children: [
+          if (p.liveUrl != null)
+            _SocialButton(
+              icon: p.liveUrl!.contains('apps.apple.com')
+                  ? FontAwesomeIcons.apple
+                  : FontAwesomeIcons.steam,
+              label: getButtonLabel(p.liveUrl!),
+              onTap: () => launchSafely(p.liveUrl!),
+            ),
+          if (p.githubUrl != null)
+            _SocialButton(
+              icon: FontAwesomeIcons.github,
+              label: 'GitHub',
+              onTap: () => launchSafely(p.githubUrl!),
+            ),
+        ],
+      );
+    }
+
     return HoverBuilder(
       builder: (context, hovered) => AnimatedContainer(
         duration: duration,
@@ -205,29 +229,9 @@ class _ProjectCard extends StatelessWidget {
               children: p.tags.map((t) => _Tag(label: t)).toList(),
             ),
             SizedBox(height: context.responsive(mobile: 18.0, desktop: 24.0)),
-            Expanded(
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                alignment: WrapAlignment.center,
-                children: [
-                  if (p.liveUrl != null)
-                    _SocialButton(
-                      icon: p.liveUrl!.contains('apps.apple.com')
-                          ? FontAwesomeIcons.apple
-                          : FontAwesomeIcons.steam,
-                      label: getButtonLabel(p.liveUrl!),
-                      onTap: () => launchSafely(p.liveUrl!),
-                    ),
-                  if (p.githubUrl != null)
-                    _SocialButton(
-                      icon: FontAwesomeIcons.github,
-                      label: 'GitHub',
-                      onTap: () => launchSafely(p.githubUrl!),
-                    ),
-                ],
-              ),
-            ),
+            context.isDesktop
+                ? Expanded(child: buildButtons())
+                : buildButtons(),
           ],
         ),
       ),

@@ -4,8 +4,8 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 import 'features/portfolio/presentation/pages/portfolio_page.dart';
 
-class KageMichiApp extends StatelessWidget {
-  const KageMichiApp({super.key});
+class HamzaSaleemApp extends StatelessWidget {
+  const HamzaSaleemApp({super.key});
 
   @override
   Widget build(BuildContext context) {
