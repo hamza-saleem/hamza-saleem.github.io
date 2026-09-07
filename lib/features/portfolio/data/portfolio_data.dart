@@ -67,9 +67,9 @@ class PortfolioData {
 
   static const List<ExperienceModel> experience = [
     ExperienceModel(
-      role: 'Junior Flutter Developer',
+      role: 'Flutter Developer',
       company: 'Studio93',
-      period: 'Oct 2025 — Present',
+      period: '2025 — Present',
       description:
           'Contributing to Grounds, a women\'s health & fitness app with 60K+ users. '
           'Built a unified exercise logging system across all workout types with zero data loss during migration. '
@@ -80,7 +80,7 @@ class PortfolioData {
     ExperienceModel(
       role: 'Founder & Game Producer',
       company: 'KageMichi Dev',
-      period: 'Dec 2025 — Present',
+      period: '2025 — Present',
       description:
           'Founded a volunteer indie game development group. Lead production planning and contribute code. '
           'Shipped 1 game on itch.io with a second title in active development.',
@@ -89,7 +89,7 @@ class PortfolioData {
     ExperienceModel(
       role: 'UE5 Game Programmer (Part-Time)',
       company: 'Know Buddy Games',
-      period: 'Oct 2024 — Present',
+      period: '2024 — Present',
       description:
           'Developing Shadow Hills Manor, a survival-horror game. '
           'Built a checkpoint-based save system to persist player progression. '
@@ -97,17 +97,10 @@ class PortfolioData {
       isCurrent: true,
     ),
     ExperienceModel(
-      role: 'Flutter Intern',
-      company: 'Studio93',
-      period: 'May 2025 — Sep 2025',
-      description:
-          'Onboarded onto the Grounds codebase. Contributed to UI implementation, '
-          'bug fixes, and minor performance improvements under senior developer guidance.',
-    ),
-    ExperienceModel(
       role: 'Game Developer & Project Coordinator',
+
       company: 'CYBRNODE',
-      period: 'Aug 2020 — Oct 2023',
+      period: '2020 — 2023',
       description:
           'Wore multiple hats across three years: built a 2D endless platformer (Foxy Run) as in-house game developer, '
           'coordinated sprints and stakeholder communication as Project Coordinator, '
@@ -116,7 +109,7 @@ class PortfolioData {
     ExperienceModel(
       role: 'Unity Game Developer',
       company: 'Clash of Dvlopers',
-      period: 'May 2021 — Jan 2022',
+      period: '2021 — 2022',
       description:
           'Started as an intern, promoted to junior game developer within 3 months. '
           'Worked on mobile game reskinning projects using Unity, integrated AdMob and Yodo1 ad platforms, '

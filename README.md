@@ -47,22 +47,19 @@ First-person psychological horror game with exploration, puzzle-solving, and dyn
 
 ## Experience
 
-**Junior Flutter Developer** — Studio93 *(Oct 2025 — Present)*
+**Flutter Developer** — Studio93 *(2025 — Present)*
 Contributing to Grounds. Built a unified exercise logging system, designed the app version management system across iOS and Android, refactored the auth module, and resolved critical crashes.
 
-**Founder & Game Producer** — KageMichi Dev *(Dec 2025 — Present)*
+**Founder & Game Producer** — KageMichi Dev *(2025 — Present)*
 Founded a volunteer indie game development group. Lead production planning and contribute code. Shipped 1 game on itch.io with a second title in active development.
 
-**UE5 Game Programmer (Part-Time)** — Know Buddy Games *(Oct 2024 — Present)*
+**UE5 Game Programmer (Part-Time)** — Know Buddy Games *(2024 — Present)*
 Developing Shadow Hills Manor. Built a checkpoint-based save system and conducted structured playtesting.
 
-**Flutter Intern** — Studio93 *(May 2025 — Sep 2025)*
-Onboarded onto the Grounds codebase. Contributed to UI implementation, bug fixes, and minor performance improvements.
-
-**Game Developer & Project Coordinator** — CYBRNODE *(Aug 2020 — Oct 2023)*
+**Game Developer & Project Coordinator** — CYBRNODE *(2020 — 2023)*
 Built Foxy Run (2D endless platformer), coordinated sprints and stakeholder communication, and contributed to MindSling as a Flutter intern.
 
-**Unity Game Developer** — Clash of Dvlopers *(May 2021 — Jan 2022)*
+**Unity Game Developer** — Clash of Dvlopers *(2021 — 2022)*
 Started as intern, promoted to junior developer within 3 months. Worked on mobile game reskinning, integrated AdMob and Yodo1 ad platforms.
 
 ---
