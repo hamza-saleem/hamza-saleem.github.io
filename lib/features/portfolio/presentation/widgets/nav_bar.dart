@@ -5,7 +5,6 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/cubit/theme_cubit.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/scroll_utils.dart';
-import '../../../../core/widgets/hover_builder.dart';
 import '../../data/portfolio_data.dart';
 
 class NavBar extends StatelessWidget {
@@ -115,18 +114,9 @@ class _NavLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HoverBuilder(
-      cursor: SystemMouseCursors.click,
-      builder: (context, hovered) => GestureDetector(
-        onTap: onTap,
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 150),
-          style: AppTextStyles.navItem(
-            hovered ? context.accent : context.textSecondary,
-          ),
-          child: Text(label),
-        ),
-      ),
+    return TextButton(
+      onPressed: onTap,
+      child: Text(label, style: AppTextStyles.navItem(context.textSecondary)),
     );
   }
 }

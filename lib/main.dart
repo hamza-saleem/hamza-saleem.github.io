@@ -7,9 +7,6 @@ import 'core/theme/cubit/theme_cubit.dart';
 void main() {
   Bloc.observer = const AppBlocObserver();
   runApp(
-    BlocProvider(
-      create: (_) => ThemeCubit(),
-      child: const HamzaSaleemApp(),
-    ),
+    BlocProvider(create: (_) => ThemeCubit(), child: const HamzaSaleemApp()),
   );
 }

@@ -43,4 +43,3 @@ class SeigaihaPainter extends CustomPainter {
   bool shouldRepaint(SeigaihaPainter old) =>
       old.color != color || old.opacity != opacity || old.scale != scale;
 }
-

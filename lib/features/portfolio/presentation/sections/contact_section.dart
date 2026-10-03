@@ -40,8 +40,10 @@ class ContactSection extends StatelessWidget {
             ),
             Text(
               "Let's Connect",
-              style: AppTextStyles.heading1(context.textPrimary,
-                  fontSize: h1Size),
+              style: AppTextStyles.heading1(
+                context.textPrimary,
+                fontSize: h1Size,
+              ),
             ),
             SizedBox(
               height: context.responsive(
@@ -51,8 +53,9 @@ class ContactSection extends StatelessWidget {
               ),
             ),
             ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxWidth: isMobile ? double.infinity : 560),
+              constraints: BoxConstraints(
+                maxWidth: isMobile ? double.infinity : 560,
+              ),
               child: Text(
                 "Have a project in mind, want to collaborate, or just want to say hello? "
                 "I'm always open to interesting conversations and new opportunities.",
@@ -91,8 +94,7 @@ class ContactSection extends StatelessWidget {
                   _ContactLink(
                     icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
-                    onTap: () =>
-                        launchSafely('mailto:${PortfolioData.email}'),
+                    onTap: () => launchSafely('mailto:${PortfolioData.email}'),
                     fullWidth: true,
                   ),
                 ],
@@ -115,8 +117,7 @@ class ContactSection extends StatelessWidget {
                   _ContactLink(
                     icon: FontAwesomeIcons.envelope,
                     label: PortfolioData.email,
-                    onTap: () =>
-                        launchSafely('mailto:${PortfolioData.email}'),
+                    onTap: () => launchSafely('mailto:${PortfolioData.email}'),
                   ),
                 ],
               ),

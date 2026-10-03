@@ -9,7 +9,7 @@ class HamzaSaleemColors {
   static const darkCard = Color(0xFF1C1A16);
   static const darkRule = Color(0xFF28261E);
   static const darkTextPrimary = Color(0xFFEDE5D8);
-  static const darkTextSecondary = Color(0xFF8A8070);
+  static const darkTextSecondary = Color(0xFFB0A695);
 
   // Light mode — warm cream tones for contrast with dark mode
   static const lightBackground = Color(0xFFF5F0E8);

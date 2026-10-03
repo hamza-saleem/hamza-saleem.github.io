@@ -37,8 +37,7 @@ class _ParallaxWidgetState extends State<ParallaxWidget> {
   }
 
   void _updateOffset() {
-    final newOffset =
-        widget.scrollController.offset * widget.parallaxStrength;
+    final newOffset = widget.scrollController.offset * widget.parallaxStrength;
     // Skip rebuild if the visual delta is sub-pixel — reduces rebuilds at 60fps+.
     if ((_offsetNotifier.value - newOffset).abs() < 0.5) return;
     _offsetNotifier.value = newOffset;
@@ -57,10 +56,7 @@ class _ParallaxWidgetState extends State<ParallaxWidget> {
       valueListenable: _offsetNotifier,
       builder: (context, offset, child) {
         final dy = widget.invert ? offset * 0.1 : -offset;
-        return Transform.translate(
-          offset: Offset(0, dy),
-          child: child,
-        );
+        return Transform.translate(offset: Offset(0, dy), child: child);
       },
       child: widget.child,
     );

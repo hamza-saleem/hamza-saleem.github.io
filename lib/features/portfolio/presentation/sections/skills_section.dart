@@ -36,7 +36,7 @@ class SkillsSection extends StatelessWidget {
               ),
             ),
             Text(
-              'Tech Stack',
+              'Engineering & Skills',
               style: AppTextStyles.heading1(
                 context.textPrimary,
                 fontSize: h1Size,

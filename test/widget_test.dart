@@ -7,11 +7,11 @@ import 'package:portfolio_website/core/theme/cubit/theme_cubit.dart';
 void main() {
   testWidgets('Portfolio app smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
-      BlocProvider(
-        create: (_) => ThemeCubit(),
-        child: const HamzaSaleemApp(),
-      ),
+      BlocProvider(create: (_) => ThemeCubit(), child: const HamzaSaleemApp()),
     );
+    await tester.pumpAndSettle();
     expect(find.byType(MaterialApp), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpAndSettle();
   });
 }

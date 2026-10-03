@@ -3,6 +3,7 @@ import '../../../../core/utils/scroll_utils.dart';
 import '../../../../core/widgets/horizontal_rule.dart';
 import '../../../../core/widgets/seigaiha_background.dart';
 import '../sections/contact_section.dart';
+import '../sections/about_section.dart';
 import '../sections/experience_section.dart';
 import '../sections/hero_section.dart';
 import '../sections/projects_section.dart';
@@ -20,6 +21,9 @@ class _PortfolioPageState extends State<PortfolioPage> {
   final _scrollController = ScrollController();
 
   final _projectsKey = GlobalKey();
+  final _mobileKey = GlobalKey();
+  final _gameKey = GlobalKey();
+  final _aboutKey = GlobalKey();
   final _skillsKey = GlobalKey();
   final _experienceKey = GlobalKey();
   final _contactKey = GlobalKey();
@@ -31,6 +35,9 @@ class _PortfolioPageState extends State<PortfolioPage> {
     super.initState();
     _sectionKeys = {
       'projects': _projectsKey,
+      'mobile': _mobileKey,
+      'game': _gameKey,
+      'about': _aboutKey,
       'skills': _skillsKey,
       'experience': _experienceKey,
       'contact': _contactKey,
@@ -65,7 +72,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
                         RepaintBoundary(
                           child: HeroSection(
                             scrollController: _scrollController,
-                            onViewWork: () => scrollToKey(_projectsKey),
+                            onViewWork: () => scrollToKey(_mobileKey),
+                            onViewGameWork: () => scrollToKey(_gameKey),
                             onContact: () => scrollToKey(_contactKey),
                           ),
                         ),
@@ -74,6 +82,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
                           child: SizedBox(
                             key: _projectsKey,
                             child: ProjectsSection(
+                              mobileKey: _mobileKey,
+                              gameKey: _gameKey,
                               scrollController: _scrollController,
                             ),
                           ),
@@ -92,6 +102,8 @@ class _PortfolioPageState extends State<PortfolioPage> {
                             child: const ExperienceSection(),
                           ),
                         ),
+                        const HorizontalRule(),
+                        SizedBox(key: _aboutKey, child: const AboutSection()),
                         const HorizontalRule(),
                         RepaintBoundary(
                           child: SizedBox(
