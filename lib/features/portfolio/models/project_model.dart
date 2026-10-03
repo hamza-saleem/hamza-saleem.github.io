@@ -96,6 +96,7 @@ class ProjectModel {
   final List<EngineeringStory> stories;
   final List<ProjectMedia> media;
   final List<ProjectMedia> beforeAfter;
+  final String? gameEmbedUrl;
   const ProjectModel({
     required this.slug,
     required this.title,
@@ -114,6 +115,7 @@ class ProjectModel {
     this.stories = const [],
     this.media = const [],
     this.beforeAfter = const [],
+    this.gameEmbedUrl,
   });
   String get trackLabel =>
       track == ProjectTrack.mobile ? 'Mobile Applications' : 'Game Development';

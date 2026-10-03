@@ -8,6 +8,7 @@ import '../../../../core/utils/url_utils.dart';
 import '../../data/portfolio_data.dart';
 import '../../models/project_model.dart';
 import '../widgets/project_widgets.dart';
+import '../widgets/playable_game.dart';
 
 List<EngineeringStory> _orderedStories(ProjectModel project) =>
     [...project.stories]..sort((a, b) {
@@ -110,6 +111,14 @@ class ProjectCaseStudyPage extends StatelessWidget {
       const SizedBox(height: 12),
       ProjectLinks(project: project),
       const SizedBox(height: 28),
+      if (project.gameEmbedUrl != null) ...[
+        PlayableGame(
+          url: project.gameEmbedUrl!,
+          title: project.title,
+          pageUrl: project.externalLinks.first.url,
+        ),
+        const SizedBox(height: 24),
+      ],
       for (final section in project.sections.where(
         (s) => s.title == 'My Contribution',
       ))
@@ -166,6 +175,10 @@ class ProjectCaseStudyPage extends StatelessWidget {
         ),
         const SizedBox(height: 28),
       ] else ...[
+        for (final section in project.sections.where(
+          (s) => s.title != 'My Contribution' && s.title != 'What I Learned',
+        ))
+          CaseStudyBlock(section: section),
         for (final story in project.stories)
           for (final section in story.sections)
             CaseStudyBlock(section: section),
@@ -174,6 +187,15 @@ class ProjectCaseStudyPage extends StatelessWidget {
         (s) => s.title == 'What I Learned',
       ))
         CaseStudyBlock(section: section),
+      if (project.gameEmbedUrl != null) ...[
+        Text(
+          'Gameplay screenshots',
+          style: AppTextStyles.heading2(context.textPrimary),
+        ),
+        const SizedBox(height: 16),
+        ProjectMediaGallery(media: project.media),
+        const SizedBox(height: 24),
+      ],
       if (project.videos.isNotEmpty) ...[
         Text(
           'Official trailers',

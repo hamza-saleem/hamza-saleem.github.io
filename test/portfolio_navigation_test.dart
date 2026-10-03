@@ -28,15 +28,13 @@ void main() {
       expect(find.text(PortfolioData.title), findsOneWidget);
       await tester.tap(find.text('View Mobile Work'));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(
-        find.text('Read engineering case study').first,
-      );
+      await tester.ensureVisible(find.text('Explore my work on Grounds').first);
       await tester.pumpAndSettle();
       expect(
-        find.text('Read engineering case study').first.hitTestable(),
+        find.text('Explore my work on Grounds').first.hitTestable(),
         findsOneWidget,
       );
-      await tester.tap(find.text('Read engineering case study').first);
+      await tester.tap(find.text('Explore my work on Grounds').first);
       await tester.pumpAndSettle();
       expect(find.byType(ProjectCaseStudyPage), findsOneWidget);
       expect(

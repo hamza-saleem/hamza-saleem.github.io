@@ -90,7 +90,12 @@ class ProjectCard extends StatelessWidget {
         const SizedBox(height: 20),
         FilledButton(
           onPressed: () => Navigator.of(context).pushNamed(project.route),
-          child: const Text('Read engineering case study'),
+          child: Text(switch (project.slug) {
+            'grounds' => 'Explore my work on Grounds',
+            'shadow-hills-manor' => 'Explore my GameInstance design',
+            'odds-and-edges' => 'See how I shaped Odds & Edges',
+            _ => 'Explore my contribution',
+          }),
         ),
         const SizedBox(height: 12),
         ProjectLinks(project: project),

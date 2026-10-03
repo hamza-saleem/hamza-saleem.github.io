@@ -135,6 +135,38 @@ class ProjectMediaView extends StatelessWidget {
                     errorBuilder: (_, error, stack) => placeholder(),
                   ),
           ),
+        if (!media.focusLogging && media.asset != null)
+          TextButton.icon(
+            icon: const Icon(Icons.fullscreen, size: 18),
+            label: const Text('View full screenshot'),
+            onPressed: () => showDialog<void>(
+              context: context,
+              builder: (context) => Dialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        tooltip: 'Close screenshot',
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ),
+                    Flexible(
+                      child: InteractiveViewer(
+                        child: Image.asset(
+                          media.asset!,
+                          fit: BoxFit.contain,
+                          semanticLabel: media.alt,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         const SizedBox(height: 12),
         Text(
           media.caption,
