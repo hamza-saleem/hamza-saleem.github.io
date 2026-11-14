@@ -109,29 +109,38 @@ class _SkillGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(width: 16, height: 1, color: context.accent),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                category.toUpperCase(),
-                style: AppTextStyles.label(context.accent),
-                overflow: TextOverflow.ellipsis,
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(context.isMobile ? 16 : 20),
+      decoration: BoxDecoration(
+        color: context.cardColor,
+        border: Border.all(color: context.ruleColor),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(width: 16, height: 1, color: context.accent),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  category.toUpperCase(),
+                  style: AppTextStyles.label(context.accent),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: items.map((skill) => _SkillChip(label: skill)).toList(),
-        ),
-      ],
+            ],
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: items.map((skill) => _SkillChip(label: skill)).toList(),
+          ),
+        ],
+      ),
     );
   }
 }
