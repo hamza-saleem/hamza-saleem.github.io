@@ -5,6 +5,7 @@ import '../../../../core/utils/url_utils.dart';
 import '../../models/project_model.dart';
 import 'youtube_embed.dart';
 import 'auth_lifecycle_diagram.dart';
+import 'project_flow_diagram.dart';
 
 class TechnologyTags extends StatelessWidget {
   final List<String> tags;
@@ -30,9 +31,12 @@ class ProjectLinks extends StatelessWidget {
           onPressed: () => launchSafely(project.liveUrl!),
           icon: const Icon(Icons.open_in_new, size: 16),
           label: Text(
-            project.track == ProjectTrack.mobile
-                ? 'View on App Store'
-                : 'View on Steam',
+            project.liveUrlLabel ??
+                switch (project.track) {
+                  ProjectTrack.mobile => 'View on App Store',
+                  ProjectTrack.game => 'View on Steam',
+                  ProjectTrack.portfolio => 'View project',
+                },
           ),
         ),
       for (final link in project.externalLinks)
@@ -179,11 +183,6 @@ class ProjectMediaView extends StatelessWidget {
             style: AppTextStyles.caption(context.textSecondary),
           ),
         ],
-        if (media.sourceUrl != null)
-          TextButton(
-            onPressed: () => launchSafely(media.sourceUrl!),
-            child: const Text('Media source'),
-          ),
       ],
     );
   }
@@ -226,9 +225,33 @@ class CaseStudyBlock extends StatelessWidget {
         Text(section.title, style: AppTextStyles.heading2(context.textPrimary)),
         const SizedBox(height: 10),
         Text(section.body, style: AppTextStyles.body(context.textSecondary)),
-        if (section.diagram == CaseStudyDiagram.authenticationLifecycle) ...[
+        if (section.diagram != null) ...[
           const SizedBox(height: 20),
-          const AuthLifecycleDiagram(),
+          switch (section.diagram!) {
+            CaseStudyDiagram.authenticationLifecycle =>
+              const AuthLifecycleDiagram(),
+            CaseStudyDiagram.foodSearchToMeal => const ProjectFlowDiagram(
+              title: 'From food search to a trustworthy meal entry',
+              steps: [
+                'Search the catalog or choose a personal food',
+                'Normalize zero, one or many search matches',
+                'Select a serving and logged quantity',
+                'Write to the target meal from the latest timeline',
+                'Preserve the daily goal and other meal entries',
+              ],
+            ),
+            CaseStudyDiagram.nutritionProgressAcrossDates =>
+              const ProjectFlowDiagram(
+                title: 'One accurate nutrition record for each day',
+                steps: [
+                  'Edit the selected day’s macros',
+                  'Today updates the profile default; a past date is a local override',
+                  'Transactionally update that day’s macro snapshot',
+                  'Preserve meals already recorded for the date',
+                  'Show live intake against the saved daily goal',
+                ],
+              ),
+          },
         ],
       ],
     ),

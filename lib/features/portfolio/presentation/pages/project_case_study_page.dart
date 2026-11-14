@@ -95,9 +95,7 @@ class ProjectCaseStudyPage extends StatelessWidget {
       ),
       const SizedBox(height: 16),
       Text(
-        project.track == ProjectTrack.mobile
-            ? "Production health and fitness app for women. I contributed as a Flutter developer at Studio93."
-            : project.description,
+        project.caseStudyIntro ?? project.description,
         style: AppTextStyles.body(context.textSecondary),
       ),
       const SizedBox(height: 20),
@@ -123,7 +121,7 @@ class ProjectCaseStudyPage extends StatelessWidget {
         (s) => s.title == 'My Contribution',
       ))
         CaseStudyBlock(section: section),
-      if (project.track == ProjectTrack.mobile) ...[
+      if (project.supportsStoryNavigation) ...[
         Text(
           'Engineering stories',
           style: AppTextStyles.heading2(context.textPrimary),

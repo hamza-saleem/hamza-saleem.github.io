@@ -28,7 +28,7 @@ class ProjectsSection extends StatelessWidget {
         Text('// selected work', style: AppTextStyles.label(context.accent)),
         const SizedBox(height: 12),
         Text(
-          'Two disciplines. One engineering mindset.',
+          'Mobile, games, and how I built this portfolio.',
           style: AppTextStyles.heading1(
             context.textPrimary,
             fontSize: context.isMobile ? 28 : 36,
@@ -37,21 +37,26 @@ class ProjectsSection extends StatelessWidget {
         const SizedBox(height: 40),
         for (final track in ProjectTrack.values) ...[
           SizedBox(
-            key: track == ProjectTrack.mobile ? mobileKey : gameKey,
-            child: Text(
-              track == ProjectTrack.mobile
-                  ? 'Mobile Applications'
-                  : 'Game Development',
-              style: AppTextStyles.heading2(context.accent),
-            ),
+            key: switch (track) {
+              ProjectTrack.mobile => mobileKey,
+              ProjectTrack.game => gameKey,
+              ProjectTrack.portfolio => null,
+            },
+            child: Text(switch (track) {
+              ProjectTrack.mobile => 'Mobile Applications',
+              ProjectTrack.game => 'Game Development',
+              ProjectTrack.portfolio => 'Portfolio Engineering',
+            }, style: AppTextStyles.heading2(context.accent)),
           ),
           const SizedBox(height: 12),
-          Text(
-            track == ProjectTrack.mobile
-                ? 'Production mobile software · State management · Reliability'
-                : 'Gameplay programming · Persistent game state · Team development',
-            style: AppTextStyles.body(context.textSecondary),
-          ),
+          Text(switch (track) {
+            ProjectTrack.mobile =>
+              'Production mobile software · State management · Reliability',
+            ProjectTrack.game =>
+              'Gameplay programming · Persistent game state · Team development',
+            ProjectTrack.portfolio =>
+              'Flutter Web · Responsive UI · Engineering case studies',
+          }, style: AppTextStyles.body(context.textSecondary)),
           const SizedBox(height: 24),
           for (final project in PortfolioData.projects.where(
             (p) => p.track == track,
@@ -92,8 +97,10 @@ class ProjectCard extends StatelessWidget {
           onPressed: () => Navigator.of(context).pushNamed(project.route),
           child: Text(switch (project.slug) {
             'grounds' => 'Explore my work on Grounds',
+            'nuex' => 'Explore my Nuex nutrition work',
             'shadow-hills-manor' => 'Explore my GameInstance design',
             'odds-and-edges' => 'See how I shaped Odds & Edges',
+            'portfolio-engineering' => 'Explore how I built this portfolio',
             _ => 'Explore my contribution',
           }),
         ),
@@ -109,7 +116,8 @@ class ProjectCard extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth < 700) {
+          if (constraints.maxWidth < 700 ||
+              (project.media.isEmpty && project.videos.isEmpty)) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

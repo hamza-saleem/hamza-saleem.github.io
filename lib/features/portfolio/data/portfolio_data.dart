@@ -32,11 +32,155 @@ class PortfolioData {
 
   static const List<ProjectModel> projects = [
     ProjectModel(
+      slug: 'nuex',
+      title: 'Nuex',
+      track: ProjectTrack.mobile,
+      context: 'Nutrition & wellness app · Engineering team',
+      role: 'Flutter Developer · Nutrition Features',
+      description:
+          'A Flutter nutrition and health tracking app for meal logging, daily macro goals, '
+          'water, weight, sleep and activity. I focused on two trust-critical moments: '
+          'getting foods into the log correctly and reviewing progress against the right '
+          'goal for each day.',
+      tags: [
+        'Flutter',
+        'Provider',
+        'GoRouter',
+        'Firebase Auth',
+        'Cloud Firestore',
+        'Health Connect',
+      ],
+      sections: [
+        CaseStudySection(
+          'My Contribution',
+          'I fixed a food-search parsing bug that hid valid single matches, built a personal '
+              'custom-food library, and made serving edits and meal writes preserve the '
+              'latest logged data. I also connected daily macro targets and home progress to '
+              'date-specific nutrition records. For the team-built step integration, I made '
+              'Health Connect status checks start when the user opens that feature.',
+        ),
+      ],
+      stories: [
+        EngineeringStory(
+          'Food logging that works from search to saved meal',
+          [
+            CaseStudySection(
+              'The break in the logging flow',
+              'The food-search API returned no match as an absent value, one match as an '
+                  'object, and multiple matches as a list. The client always treated the '
+                  'field as a list. When the API found exactly one food, parsing threw and '
+                  'the app surfaced an empty result state.',
+            ),
+            CaseStudySection(
+              'Root cause and fix',
+              'I traced the false empty state to the response shape, not the search query. '
+                  'I normalized absent, single-object and list responses at the parsing '
+                  'boundary so the rest of the food library receives one consistent list.',
+            ),
+            CaseStudySection(
+              'When the catalog is not enough',
+              'I added a user-scoped custom-food library with create, edit and delete flows. '
+                  'Users can enter a food’s name, serving details and macros, then select '
+                  'that saved food from the library to add it to a meal.',
+            ),
+            CaseStudySection(
+              'Keep the portion the user chose',
+              'Food records can contain serving data in different shapes. I normalized '
+                  'servings and kept the selected serving and quantity when a logged food is '
+                  'reopened for editing. Macro totals scale with the chosen amount, while '
+                  'rounding is applied for display rather than before summing.',
+            ),
+            CaseStudySection(
+              'Protect the saved meal',
+              'Add, edit and remove operations read the latest day timeline inside a '
+                  'Firestore transaction, validate the target meal and item, then update '
+                  'only meal data. This keeps the day’s macro target and other current '
+                  'entries intact; if the target meal disappeared while its sheet was open, '
+                  'the user gets a clear message.',
+              diagram: CaseStudyDiagram.foodSearchToMeal,
+            ),
+            CaseStudySection(
+              'Outcome',
+              'A food returned as a single search match now reaches the result list instead '
+                  'of looking like no food was found. Catalog results and personal foods can '
+                  'both enter the same portion-aware logging flow, with writes based on the '
+                  'latest saved day state.',
+            ),
+          ],
+          subtitle:
+              'Removing a false empty state and carrying the right food and portion safely into the daily log.',
+        ),
+        EngineeringStory(
+          'Keep nutrition progress honest across dates',
+          [
+            CaseStudySection(
+              'The product problem',
+              'Nutrition history needs a stable goal for each date. Editing yesterday’s '
+                  'target should not silently change the profile goal used by future days, '
+                  'and updating a goal should never erase meals already logged. The home '
+                  'summary also needed to show nutrients from saved meals rather than a '
+                  'fixed calorie value.',
+            ),
+            CaseStudySection(
+              'Make the goal belong to the selected day',
+              'The editor starts from that date’s saved macro snapshot, falling back to the '
+                  'profile goal when the date has no record. Saving today updates the profile '
+                  'default and today’s snapshot; changing a past date writes only that '
+                  'date’s override.',
+              diagram: CaseStudyDiagram.nutritionProgressAcrossDates,
+            ),
+            CaseStudySection(
+              'Save the goal without replacing the day',
+              'I added a transactional create-or-update for the selected date. It changes '
+                  'only the macro snapshot and timestamp on an existing record, preserving '
+                  'its meal entries; a date with no record gets a new goal snapshot and an '
+                  'empty meal list.',
+            ),
+            CaseStudySection(
+              'Close the loop with actual intake',
+              'I replaced the home calorie placeholder with totals from the live meal '
+                  'timeline, then made calorie and macro cards react to saved intake. I also '
+                  'built a calorie-composition ring that shows the share from protein, '
+                  'carbohydrates and fat, tracks progress toward the goal, and shows how '
+                  'much the user is over when intake exceeds it.',
+            ),
+            CaseStudySection(
+              'Outcome',
+              'Users can adjust a past day without moving the profile default, and goal '
+                  'changes do not replace that day’s logged foods. The home summary is '
+                  'calculated from saved meals, so progress is shown against the nutrition '
+                  'record the user actually created.',
+            ),
+          ],
+          subtitle:
+              'Keeping per-day goals, saved meals and the home progress summary in sync.',
+        ),
+      ],
+      liveUrl:
+          'https://play.google.com/store/apps/details?id=com.nuex.org&hl=en',
+      liveUrlLabel: 'View on Play Store',
+      media: [
+        ProjectMedia(
+          asset: 'assets/images/projects/nuex/hero.png',
+          caption: 'Nuex — public Google Play listing',
+          alt:
+              'Browser capture of the Nuex: Calorie & Weight Tracker Google Play listing, including its app icon and promotional screenshots.',
+          sourceUrl:
+              'https://play.google.com/store/apps/details?id=com.nuex.org&hl=en',
+          explanation:
+              'Public product context; this does not identify which screens I implemented.',
+        ),
+      ],
+      featured: true,
+    ),
+    ProjectModel(
       slug: 'grounds',
       title: 'Grounds',
       track: ProjectTrack.mobile,
       context: 'Production application · Studio93',
       role: 'Flutter Developer / Development Team Member',
+      caseStudyIntro:
+          'Production health and fitness app for women. I contributed as a Flutter developer at Studio93.',
       sections: [
         CaseStudySection(
           'My Contribution',
@@ -496,6 +640,107 @@ class PortfolioData {
       ],
       featured: true,
     ),
+    ProjectModel(
+      slug: 'portfolio-engineering',
+      title: 'Building this portfolio',
+      track: ProjectTrack.portfolio,
+      context: 'Personal project · Flutter Web',
+      role: 'Portfolio developer',
+      description:
+          'A responsive Flutter Web portfolio with separate project tracks, direct engineering-story routes, and an automated GitHub Pages release path.',
+      tags: [
+        'Flutter',
+        'Dart',
+        'flutter_bloc',
+        'GitHub Actions',
+        'GitHub Pages',
+      ],
+      sections: [
+        CaseStudySection(
+          'My Contribution',
+          'I built and iterated on this Flutter portfolio: organizing shared code into core and portfolio-feature areas, creating responsive project presentations, migrating theme state from Provider to Flutter Bloc, and adding routed case studies with media, diagrams and a playable game embed. I also configured the GitHub Pages release workflow. The stories below describe changes supported by this repository’s history and source.',
+        ),
+      ],
+      stories: [
+        EngineeringStory(
+          'Building a responsive, modular portfolio',
+          [
+            CaseStudySection(
+              'Starting with the portfolio itself',
+              'My first full implementation established the hero, projects, skills, experience and contact sections, along with theme and responsive helpers. I later reorganized shared code under lib/core and the portfolio feature under lib/features/portfolio.',
+            ),
+            CaseStudySection(
+              'Reworking the project layout',
+              'I replaced an earlier GridView with width-aware project rows: paired cards at wider sizes and a single-column list on mobile. In a later redesign, I organized projects into separate Mobile Applications and Game Development tracks, rendered from the project data.',
+            ),
+            CaseStudySection(
+              'Reusable interactions',
+              'I added a shared HoverBuilder for pointer interactions and a ParallaxWidget used in the hero for scroll-linked movement. I also added browser text measurement and used it to size the animated underline in that section.',
+            ),
+            CaseStudySection(
+              'Responsive implementation',
+              'The portfolio uses shared responsive helpers for mobile, tablet and desktop sizing. The current project section adapts its cards to the available width and keeps each project track distinct.',
+            ),
+            CaseStudySection(
+              'Turning project data into case studies',
+              'I added structured project and engineering-story data, direct routes to project and story pages, and reusable media, diagram and trailer components. A later update added a playable Odds & Edges embed. These features describe how this portfolio presents projects; they do not claim authorship of the underlying project implementations.',
+            ),
+          ],
+          routeSlug: 'responsive-portfolio-ui',
+          cardTitle: 'Responsive UI',
+          cardSummary:
+              'Started with a Flutter portfolio, reorganized its code, and evolved its responsive project and case-study presentation.',
+          subtitle:
+              'From the initial Flutter sections to a modular, responsive portfolio with direct case-study routes.',
+        ),
+        EngineeringStory(
+          'Migrating theme state and adding focused Cubits',
+          [
+            CaseStudySection(
+              'Replacing the previous state setup',
+              'I replaced the Provider-based theme notifier with Flutter Bloc. I introduced ThemeCubit for theme selection, HeroCubit for the measured hero-name width, and HoverCubit with explicit enter/exit transitions. The reusable HoverBuilder continues to manage pointer hover locally within its widget.',
+            ),
+            CaseStudySection(
+              'Wiring state to the interface',
+              'main.dart provides ThemeCubit through BlocProvider, and app.dart rebuilds theme-dependent MaterialApp state through BlocBuilder. The navigation theme toggle calls ThemeCubit; the hero uses HeroCubit for its underline measurement.',
+            ),
+            CaseStudySection(
+              'Testing state transitions',
+              'I added focused tests for theme toggling, hover entry/exit and hero-width updates. A later pass added buildWhen filters to the app and hero builders so they only react to the state fields they use; I make no measured rebuild or frame-rate claim.',
+            ),
+          ],
+          routeSlug: 'cubit-state-management',
+          cardTitle: 'Cubit state',
+          cardSummary:
+              'Replaced Provider-based theme state with Flutter Bloc, added Cubits for hero measurement and hover transitions, and tested their state changes.',
+          subtitle:
+              'Migrating theme state and adding testable Cubit boundaries for hero measurement and hover transitions.',
+        ),
+        EngineeringStory(
+          'Preparing the Flutter portfolio for web release',
+          [
+            CaseStudySection(
+              'A repeatable GitHub Pages path',
+              'I added a GitHub Actions workflow that builds the Flutter app in release mode, uploads the web build artifact and deploys it to GitHub Pages. I set the base href to the root path used by this user-site repository and added Makefile commands for building, serving and cleaning the web build.',
+            ),
+            CaseStudySection(
+              'Reducing the splash-logo asset',
+              'I replaced the 2,030,789-byte PNG splash logo with a 178,444-byte WebP, about 91% fewer bytes. The HTML preloads the WebP and retains the PNG as a fallback. This is an asset-size comparison, not a measured page-load improvement.',
+            ),
+            CaseStudySection(
+              'Being precise about loading claims',
+              'The repository records iterations on font delivery and Flutter web renderer choices. The current workflow builds with --wasm; the splash references Google Fonts, while Flutter font assets are declared in pubspec.yaml. No before/after page-load timing is recorded, so I do not claim a measured speedup.',
+            ),
+          ],
+          routeSlug: 'flutter-web-delivery',
+          cardTitle: 'Web delivery',
+          cardSummary:
+              'Configured GitHub Pages deployment and reduced the splash-logo asset by about 91% by bytes.',
+          subtitle:
+              'Automating Flutter Web deployment while keeping asset and performance claims evidence-based.',
+        ),
+      ],
+    ),
   ];
 
   static const Map<String, List<String>> skills = {
@@ -538,7 +783,7 @@ class PortfolioData {
     ExperienceModel(
       role: 'Flutter Developer',
       company: 'Studio93',
-      period: '2025',
+      period: '2025 - 2026',
       description:
           'Contributed to Grounds, a production health and fitness app.',
       highlights: [
@@ -551,7 +796,7 @@ class PortfolioData {
     ExperienceModel(
       role: 'Founder & Game Producer',
       company: 'KageMichi Dev',
-      period: '2025',
+      period: '2025 - Present',
       description:
           'Founded a volunteer indie game development group and led production planning.',
       highlights: [
@@ -563,7 +808,7 @@ class PortfolioData {
     ExperienceModel(
       role: 'UE5 Game Programmer · Part-time',
       company: 'Know Buddy Games',
-      period: '2024',
+      period: '2024 - 2026',
       description:
           'Contributed to Shadow Hills Manor as part of the development team.',
       highlights: [
@@ -577,7 +822,7 @@ class PortfolioData {
     ExperienceModel(
       role: 'Game Developer & Project Coordinator',
       company: 'CYBRNODE',
-      period: '2020 — 2023',
+      period: '2022 — 2024',
       description:
           'Worked across game development, project coordination and an earlier Flutter internship.',
       highlights: [

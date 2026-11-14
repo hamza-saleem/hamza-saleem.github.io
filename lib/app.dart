@@ -24,7 +24,7 @@ class HamzaSaleemApp extends StatelessWidget {
           onGenerateRoute: (settings) {
             for (final project in PortfolioData.projects) {
               for (final story in project.stories) {
-                if (project.track == ProjectTrack.mobile &&
+                if (project.supportsStoryNavigation &&
                     settings.name == '${project.route}/${story.slug}') {
                   return MaterialPageRoute<void>(
                     settings: settings,

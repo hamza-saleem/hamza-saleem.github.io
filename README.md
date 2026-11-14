@@ -2,7 +2,7 @@
 
 Software Engineer — Mobile Applications & Game Development.
 
-Flutter Web portfolio with separate mobile and game tracks, engineering case studies for Grounds and Shadow Hills Manor, captioned project media, theme switching, grouped skills, experience, About and contact.
+Flutter Web portfolio with mobile and game tracks, engineering case studies for Nuex and Grounds, project studies for Shadow Hills Manor and Odds & Edges, a Portfolio Engineering case study, captioned project media, theme switching, grouped skills, experience, About and contact.
 
 See [content and development guide](docs/PORTFOLIO_CONTENT.md) for local commands, routes, pending content and exact media asset paths.
 

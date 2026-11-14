@@ -1,6 +1,10 @@
-enum ProjectTrack { mobile, game }
+enum ProjectTrack { mobile, game, portfolio }
 
-enum CaseStudyDiagram { authenticationLifecycle }
+enum CaseStudyDiagram {
+  authenticationLifecycle,
+  foodSearchToMeal,
+  nutritionProgressAcrossDates,
+}
 
 class CaseStudySection {
   final String title;
@@ -33,36 +37,63 @@ class EngineeringStory {
   final List<CaseStudySection> sections;
   final List<ProjectMedia> media;
   final String? subtitle;
+  final String? routeSlug;
+  final String? cardTitle;
+  final String? cardSummary;
   const EngineeringStory(
     this.title,
     this.sections, {
     this.media = const [],
     this.subtitle,
+    this.routeSlug,
+    this.cardTitle,
+    this.cardSummary,
   });
 }
 
 extension EngineeringStoryNavigation on EngineeringStory {
-  String get slug => title.startsWith('Authentication')
-      ? 'authentication'
-      : title.startsWith('Extending')
-      ? 'exercise-logging'
-      : title.startsWith('App Update')
-      ? 'app-update'
-      : 'production-debugging';
-  String get shortTitle => title.startsWith('Authentication')
-      ? 'Authentication & User State'
-      : title.startsWith('Extending')
-      ? 'Exercise Logging'
-      : title.startsWith('App Update')
-      ? 'App Update'
-      : 'Production Debugging';
-  String get summary => title.startsWith('Authentication')
-      ? 'Clarified authentication and user-state responsibilities, and improved readiness and controller lifecycle handling.'
-      : title.startsWith('Extending')
-      ? 'Supported exercise-specific measurements with value1/value2 while preserving historical weight/reps records.'
-      : title.startsWith('App Update')
-      ? 'Implemented update UI, models and dashboard integration, and refined dependency registration.'
-      : 'Strengthened lifecycle guards, asynchronous state handling and checks around production edge cases.';
+  String get slug {
+    if (routeSlug != null) return routeSlug!;
+    if (title.startsWith('Authentication')) return 'authentication';
+    if (title.startsWith('Extending')) return 'exercise-logging';
+    if (title.startsWith('App Update')) return 'app-update';
+    if (title.startsWith('Food logging')) return 'food-logging-reliability';
+    if (title.startsWith('Keep nutrition progress')) {
+      return 'nutrition-progress-history';
+    }
+    return 'production-debugging';
+  }
+
+  String get shortTitle {
+    if (cardTitle != null) return cardTitle!;
+    if (title.startsWith('Authentication'))
+      return 'Authentication & User State';
+    if (title.startsWith('Extending')) return 'Exercise Logging';
+    if (title.startsWith('App Update')) return 'App Update';
+    if (title.startsWith('Food logging')) return 'Food Search & Logging';
+    if (title.startsWith('Keep nutrition progress')) return 'Daily Progress';
+    return 'Production Debugging';
+  }
+
+  String get summary {
+    if (cardSummary != null) return cardSummary!;
+    if (title.startsWith('Authentication')) {
+      return 'Clarified authentication and user-state responsibilities, and improved readiness and controller lifecycle handling.';
+    }
+    if (title.startsWith('Extending')) {
+      return 'Supported exercise-specific measurements with value1/value2 while preserving historical weight/reps records.';
+    }
+    if (title.startsWith('App Update')) {
+      return 'Implemented update UI, models and dashboard integration, and refined dependency registration.';
+    }
+    if (title.startsWith('Food logging')) {
+      return 'Fixed a false empty search state and carried catalog or personal foods into portion-aware, transaction-safe meal logging.';
+    }
+    if (title.startsWith('Keep nutrition progress')) {
+      return 'Kept past-day goals separate from the profile default and tied live progress to saved meal data.';
+    }
+    return 'Strengthened lifecycle guards, asynchronous state handling and checks around production edge cases.';
+  }
 }
 
 class ProjectVideo {
@@ -85,8 +116,10 @@ class ProjectModel {
   final String context;
   final String role;
   final String description;
+  final String? caseStudyIntro;
   final List<String> tags;
   final String? liveUrl;
+  final String? liveUrlLabel;
   final String? githubUrl;
   final String? videoUrl;
   final bool featured;
@@ -104,8 +137,10 @@ class ProjectModel {
     required this.context,
     required this.role,
     required this.description,
+    this.caseStudyIntro,
     required this.tags,
     this.liveUrl,
+    this.liveUrlLabel,
     this.githubUrl,
     this.videoUrl,
     this.featured = false,
@@ -117,7 +152,12 @@ class ProjectModel {
     this.beforeAfter = const [],
     this.gameEmbedUrl,
   });
-  String get trackLabel =>
-      track == ProjectTrack.mobile ? 'Mobile Applications' : 'Game Development';
+  String get trackLabel => switch (track) {
+    ProjectTrack.mobile => 'Mobile Applications',
+    ProjectTrack.game => 'Game Development',
+    ProjectTrack.portfolio => 'Portfolio Engineering',
+  };
   String get route => '/projects/$slug';
+  bool get supportsStoryNavigation =>
+      track == ProjectTrack.mobile || track == ProjectTrack.portfolio;
 }

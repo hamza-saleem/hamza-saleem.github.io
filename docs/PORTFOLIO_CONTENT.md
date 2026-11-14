@@ -2,14 +2,38 @@
 
 The site retains Flutter Web, Bloc theme state, existing responsive helpers and GitHub Pages deployment. Project case studies use Flutter's default hash routing so direct links work without server rewrites:
 
+- `/#/projects/nuex`
+- `/#/projects/nuex/food-logging-reliability`
+- `/#/projects/nuex/nutrition-progress-history`
 - `/#/projects/grounds`
 - `/#/projects/shadow-hills-manor`
+- `/#/projects/portfolio-engineering`
+- `/#/projects/portfolio-engineering/responsive-portfolio-ui`
+- `/#/projects/portfolio-engineering/cubit-state-management`
+- `/#/projects/portfolio-engineering/flutter-web-delivery`
 
 Content remains centralized in `lib/features/portfolio/data/portfolio_data.dart`. The model supports reusable sections, engineering stories, captioned media, source links, optional video/demo URLs and before/after media. Empty sections are hidden. English strings are separated from presentation in the data model to support later localization; no language proficiency or translation is claimed.
 
+## Nuex case studies
+
+The Nuex project now leads with two user-impact stories grounded in Hamza’s authored history. Food search, personal foods, portions and safe meal writes (`be21b35`, `edc3b7f`, `e04ea95`, `c4c761c`, `35d3357`, `e47ee68`); per-day goals, live home intake and calorie composition (`9266a57`, `19164c4`, `f891f28`, `54598e5`, `074261a`). The false empty-search state occurred when the API returned exactly one match as an object and the client expected a list. A smaller change deferred Health Connect status checks until the user opened that feature (`d86b53b`); the wider step-tracking integration was team-built. The public Google Play listing capture provides product context only; no private feature screenshots or product metrics were supplied. The studies describe concrete capabilities and use implementation-flow diagrams without quantified impact claims.
+
+## Portfolio Engineering case study
+
+This case study is about building this portfolio; its commit history is not evidence of implementation work on Nuex, Grounds or the games. Hamza confirmed the following repository identities as his: `hamza-saleem <hamza.saleem87@gmail.com>`, `hamza-saleem-s93 <hamza.saleem@studio93.io>`, and `Muhammad Hamza Saleem (Scapegoat)` with `hamza.saleem87@gmail.com` or `50026474+hamza-saleem@users.noreply.github.com`. Some matching commits include Claude co-author attribution. Do not claim sole authorship. The assistant-created `80e74ac` skills-section commit is excluded from this case-study evidence.
+
+Evidence for the public stories:
+
+- Initial portfolio and its evolution: `34af5bc` creates the first full Flutter portfolio implementation; `7b28183` reorganizes shared code into core/feature areas. Responsive layout and shared UI utilities are further evidenced by `653fb07`, `e42bca9` (GridView-to-width-aware project rows), `06157d1` (HoverBuilder and text measurement), `21ab977` (ParallaxWidget and bundled fonts), `1e8781d` (responsive spacing and typography), and `d3a5869` (current mobile/game project tracks and case-study redesign). The current `projects_section.dart`, `hero_section.dart`, `responsive.dart`, `hover_builder.dart` and `parallax_widget.dart` corroborate the described structures. Do not claim engagement, recruiter conversion, or performance outcomes.
+- State management: `b87dd06` replaces Provider-based theme wiring with `flutter_bloc`, adds ThemeCubit, HeroCubit and HoverCubit and their tests; `a56ed32` adds `buildWhen` filters. Current `app.dart`, `hero_section.dart`, Cubit files and `test/cubits/` show the final wiring/tests. HoverBuilder's runtime hover state remains widget-local; do not imply it uses HoverCubit.
+- Web delivery/assets: `f14165e` adds the Pages workflow; `91886cc` sets root `--base-href`; `55d2e55` removes the deprecated renderer flag; `1dc3e86` adds the WebP splash logo, preload/fallback and Makefile; `b7016e0` records a later Google Fonts/HTML-renderer iteration; `d3a5869` returns the build workflow/Makefile to `--wasm` and bundles Flutter fonts. The current workflow, Makefile, `pubspec.yaml` and `web/index.html` corroborate current configuration. Git object sizes at `1dc3e86`: PNG 2,030,789 bytes and WebP 178,444 bytes (about 91% fewer bytes); this is only an asset-size comparison, not a page-load measurement.
+- Case-study platform and game embeds: `d3a5869` introduces the structured project/story model and routed case-study pages; `43fff1b` adds the playable Odds & Edges case study/embed. Describe the portfolio's capabilities, not the underlying project's implementation as Hamza's.
+- Maintenance history also includes project-layout overflow fixes, branding, dependency compatibility and year-only experience timelines (`9e61008`, `c8a3173`, `9c032a1`, `adccd4b`, `b3cfd61`). These are not presented as separate impact stories.
+
+The `a56ed32` and `b7016e0` commit messages contain optimization estimates, but no benchmark methodology or before/after page-load measurements are present. Those estimates are deliberately excluded. No user, business, frame-rate or end-to-end load-time outcome is claimed.
+
 ## Content to provide
 
-- Confirm the end dates/current status of Studio93, Know Buddy Games and KageMichi Dev. Original start years are preserved. Current badges are withheld until verified.
 - Grounds: app-update decision criteria/presentation timing/registration rationale and original production-debugging reproduction/Sentry traces remain undocumented. The broader Grounds reflection is now grounded in Hamza’s authentication and logging accounts. The authentication/user-state lifecycle story and its reflection are supplied by Hamza.
 - Shadow Hills Manor: the GameInstance reflection has been reviewed and approved by Hamza. The user confirms designing and implementing the team’s shared foundation for save, loading and other persistent game-wide systems. Specific loader internals, streaming techniques, APIs and measured outcomes are not documented and must not be invented.
 - A reviewed resume at `web/resume/hamza-saleem-resume.pdf`; then set `PortfolioData.resumeUrl` to `resume/hamza-saleem-resume.pdf`. The Resume action is visibly disabled until then.
@@ -21,9 +45,10 @@ The browser captures are real public store-page screenshots, not captures of the
 
 Use `assets/images/projects/<slug>/`:
 
-Grounds files:
+Nuex and Grounds store-page captures:
 
-- `grounds/hero.png` — public store capture.
+- `nuex/hero.png` — public Google Play capture.
+- `grounds/hero.png` — public App Store capture.
 - `grounds/feature-logging-cardio.jpeg` and `grounds/feature-logging-strength.jpeg` — supplied exercise-logging screenshots.
 - `grounds/technical-state-flow.webp` — optional technical visual.
 - `grounds/before.webp`, `grounds/after.webp` — optional comparison.
@@ -79,9 +104,9 @@ Production debugging expanded from supplied history, with implementation scope s
 
 Sentry work is already documented in the original portfolio and the supplied branch history. Do not assert a specific exception type, reproduction trace, logging payload, fix rollout or crash-rate reduction from commit subjects. A concrete investigation still needs Hamza’s account; the broader reflection is filled from his authentication and logging explanations. No verification section or screenshot placeholder was added.
 
-TODO completion pass: filled Grounds’ project reflection using the supplied authentication/lifecycle reflection and V1/V2 logging account. The app-update study already contains the supported page/controller/models, UI, dashboard integration and dependency evolution; its remaining unknown decision criteria were moved out of the public story into the pending-content list above. Replaced the debugging placeholder with the documented mounted-check comment-scrolling fix, while explicitly noting that the original exception/reproduction trace is unavailable. Employment end dates/current status, KageMichi’s second-title status and a reviewed resume remain unresolved. Do not infer employment end dates from the last supplied commit date.
+TODO completion pass: filled Grounds’ project reflection using the supplied authentication/lifecycle reflection and V1/V2 logging account. The app-update study already contains the supported page/controller/models, UI, dashboard integration and dependency evolution; its remaining unknown decision criteria were moved out of the public story into the pending-content list above. Replaced the debugging placeholder with the documented mounted-check comment-scrolling fix, while explicitly noting that the original exception/reproduction trace is unavailable. KageMichi’s second-title status and a reviewed resume remain unresolved. Do not infer employment end dates from the last supplied commit date.
 
-Recruiter review follow-up: removed public employment TODOs without inferring end dates/current employment (entries show confirmed start years); omitted the unknown second-title status and hide the resume action until a reviewed asset is supplied. Outstanding facts remain in this internal document. Grounds now leads with a contribution summary and story navigation, authentication first. Product-listing capture is smaller; logging screenshots display a focused panel with full originals available in a zoomable dialog. Body text is larger and dark secondary text brighter. Overview and experience copy now describe supported app-update UI/dashboard integration and reliability work without criticality or broad version-management claims. Shadow Hills Manor's technical contribution is unchanged; no additional architectural example or proprietary media was added.
+Recruiter review follow-up: removed public employment TODOs; omitted the unknown second-title status and hide the resume action until a reviewed asset is supplied. The user later supplied the employment periods now shown in `PortfolioData.experience`. Outstanding facts remain in this internal document. Grounds now leads with a contribution summary and story navigation, authentication first. Product-listing capture is smaller; logging screenshots display a focused panel with full originals available in a zoomable dialog. Body text is larger and dark secondary text brighter. Overview and experience copy now describe supported app-update UI/dashboard integration and reliability work without criticality or broad version-management claims. Shadow Hills Manor's technical contribution is unchanged; no additional architectural example or proprietary media was added.
 
 Shadow Hills Manor clarification: Hamza confirmed save/load as the primary requirement, covering inventory, stats, player position and other essential game state. GameInstance combined directly held persistent state with coordination of separate systems. The story now states this explicitly; which individual values lived where, serialization and subsystem interfaces remain unspecified.
 
