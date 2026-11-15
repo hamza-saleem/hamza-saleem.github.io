@@ -12,25 +12,25 @@ class AppTextStyles {
   static TextStyle display(Color color, {double fontSize = 56}) => TextStyle(
     fontFamily: _serifFamily,
     fontSize: fontSize,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w400,
     color: color,
     height: 1.15,
-    letterSpacing: -1.0,
+    letterSpacing: 0,
   );
 
   static TextStyle heading1(Color color, {double fontSize = 36}) => TextStyle(
     fontFamily: _serifFamily,
     fontSize: fontSize,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
     color: color,
     height: 1.2,
-    letterSpacing: -0.5,
+    letterSpacing: 0,
   );
 
   static TextStyle heading2(Color color, {double fontSize = 24}) => TextStyle(
     fontFamily: _serifFamily,
     fontSize: fontSize,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
     color: color,
     height: 1.3,
   );
@@ -42,7 +42,7 @@ class AppTextStyles {
     fontSize: 15,
     fontWeight: FontWeight.w400,
     color: color,
-    height: 1.7,
+    height: 1.6,
   );
 
   static TextStyle label(Color color) => TextStyle(
@@ -50,7 +50,7 @@ class AppTextStyles {
     fontSize: 11,
     fontWeight: FontWeight.w500,
     color: color,
-    letterSpacing: 1.5,
+    letterSpacing: 0.8,
   );
 
   static TextStyle caption(Color color) => TextStyle(
@@ -66,7 +66,7 @@ class AppTextStyles {
     fontSize: fontSize,
     fontWeight: FontWeight.w500,
     color: color,
-    letterSpacing: 0.8,
+    letterSpacing: 0.2,
   );
 
   static TextStyle button(Color color, {double fontSize = 13}) => TextStyle(
@@ -74,6 +74,6 @@ class AppTextStyles {
     fontSize: fontSize,
     fontWeight: FontWeight.w600,
     color: color,
-    letterSpacing: 1.2,
+    letterSpacing: 0,
   );
 }

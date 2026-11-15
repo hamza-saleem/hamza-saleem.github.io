@@ -47,10 +47,6 @@
       /* Exact darkBackground from HamzaSaleemColors */
       background-color: #141412;
 
-      /* Seigaiha pattern — mirrors SeigaihaPainter arc geometry exactly */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M0 0 A40 40 0 0 1 80 0' fill='none' stroke='rgba(196%2C180%2C154%2C0.055)' stroke-width='0.8'/%3E%3Cpath d='M-40 40 A40 40 0 0 1 40 40' fill='none' stroke='rgba(196%2C180%2C154%2C0.055)' stroke-width='0.8'/%3E%3Cpath d='M40 40 A40 40 0 0 1 120 40' fill='none' stroke='rgba(196%2C180%2C154%2C0.055)' stroke-width='0.8'/%3E%3C/svg%3E");
-      background-size: 80px 80px;
-
       /* Fade-out: JS adds .splash--hidden */
       opacity: 1;
       transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -204,11 +200,6 @@
     }
   </style>
 
-  <!--
-    pretext bridge — loads from jsDelivr CDN and exposes
-    window._pretext.measureText() for Dart JS interop.
-  -->
-  <script type="module" src="pretext_bridge.js"></script>
 </head>
 <body>
 

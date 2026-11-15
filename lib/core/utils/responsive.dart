@@ -24,9 +24,9 @@ extension ResponsiveContext on BuildContext {
 
   /// Horizontal section padding — tight on mobile, roomy on desktop.
   double get sectionPaddingH =>
-      responsive(mobile: 20.0, tablet: 48.0, desktop: 80.0);
+      responsive(mobile: 24.0, tablet: 40.0, desktop: 96.0);
 
   /// Vertical section padding.
   double get sectionPaddingV =>
-      responsive(mobile: 56.0, tablet: 72.0, desktop: 96.0);
+      responsive(mobile: 48.0, tablet: 56.0, desktop: 64.0);
 }

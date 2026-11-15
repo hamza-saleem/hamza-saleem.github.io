@@ -1,1 +1,1 @@
-Shadow Hills Manor uses official public trailer embeds and developer links only. Do not add screenshots, code, Blueprint graphs or internal diagrams.
+Approved media: `steam-store-capture.png` is a 1440×1000 browser capture of the public Steam store page, recorded in `source.json`. It is product context, not a gameplay screenshot or evidence that Hamza authored the Steam page or its displayed media. Official public trailers and developer links remain the video/link sources. Do not add internal code, Blueprint graphs or private project visuals.

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/scroll_utils.dart';
-import '../../../../core/widgets/horizontal_rule.dart';
-import '../../../../core/widgets/seigaiha_background.dart';
 import '../sections/contact_section.dart';
 import '../sections/about_section.dart';
-import '../sections/experience_section.dart';
 import '../sections/hero_section.dart';
 import '../sections/projects_section.dart';
-import '../sections/skills_section.dart';
 import '../widgets/nav_bar.dart';
 
 class PortfolioPage extends StatefulWidget {
-  const PortfolioPage({super.key});
+  final String? initialSection;
+
+  const PortfolioPage({super.key, this.initialSection});
 
   @override
   State<PortfolioPage> createState() => _PortfolioPageState();
@@ -19,14 +17,10 @@ class PortfolioPage extends StatefulWidget {
 
 class _PortfolioPageState extends State<PortfolioPage> {
   final _scrollController = ScrollController();
-
   final _projectsKey = GlobalKey();
-  final _mobileKey = GlobalKey();
-  final _gameKey = GlobalKey();
   final _aboutKey = GlobalKey();
-  final _skillsKey = GlobalKey();
-  final _experienceKey = GlobalKey();
   final _contactKey = GlobalKey();
+  bool _initialSectionHandled = false;
 
   late final Map<String, GlobalKey> _sectionKeys;
 
@@ -34,14 +28,22 @@ class _PortfolioPageState extends State<PortfolioPage> {
   void initState() {
     super.initState();
     _sectionKeys = {
-      'projects': _projectsKey,
-      'mobile': _mobileKey,
-      'game': _gameKey,
+      'work': _projectsKey,
       'about': _aboutKey,
-      'skills': _skillsKey,
-      'experience': _experienceKey,
       'contact': _contactKey,
     };
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final section = widget.initialSection;
+    if (_initialSectionHandled || section == null || section == 'top') return;
+    _initialSectionHandled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final key = _sectionKeys[section];
+      if (mounted && key != null) scrollToKey(key);
+    });
   }
 
   @override
@@ -51,75 +53,41 @@ class _PortfolioPageState extends State<PortfolioPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SeigaihaBackground(
-        child: Column(
-          children: [
-            NavBar(
-              sectionKeys: _sectionKeys,
-              scrollController: _scrollController,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Center(
+  Widget build(BuildContext context) => Scaffold(
+    body: Column(
+      children: [
+        NavBar(sectionKeys: _sectionKeys, scrollController: _scrollController),
+        Expanded(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1200),
+                    constraints: const BoxConstraints(maxWidth: 1440),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RepaintBoundary(
-                          child: HeroSection(
-                            scrollController: _scrollController,
-                            onViewWork: () => scrollToKey(_mobileKey),
-                            onViewGameWork: () => scrollToKey(_gameKey),
-                            onContact: () => scrollToKey(_contactKey),
-                          ),
+                        HeroSection(
+                          onViewWork: () => scrollToKey(_projectsKey),
+                          onContact: () => scrollToKey(_contactKey),
                         ),
-                        const HorizontalRule(),
-                        RepaintBoundary(
-                          child: SizedBox(
-                            key: _projectsKey,
-                            child: ProjectsSection(
-                              mobileKey: _mobileKey,
-                              gameKey: _gameKey,
-                              scrollController: _scrollController,
-                            ),
-                          ),
+                        SizedBox(
+                          key: _projectsKey,
+                          child: const ProjectsSection(),
                         ),
-                        const HorizontalRule(),
-                        RepaintBoundary(
-                          child: SizedBox(
-                            key: _skillsKey,
-                            child: const SkillsSection(),
-                          ),
-                        ),
-                        const HorizontalRule(),
-                        RepaintBoundary(
-                          child: SizedBox(
-                            key: _experienceKey,
-                            child: const ExperienceSection(),
-                          ),
-                        ),
-                        const HorizontalRule(),
                         SizedBox(key: _aboutKey, child: const AboutSection()),
-                        const HorizontalRule(),
-                        RepaintBoundary(
-                          child: SizedBox(
-                            key: _contactKey,
-                            child: const ContactSection(),
-                          ),
-                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
+                SizedBox(key: _contactKey, child: const ContactSection()),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
-  }
+      ],
+    ),
+  );
 }

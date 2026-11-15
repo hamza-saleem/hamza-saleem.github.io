@@ -19,7 +19,7 @@ Add a standalone “Portfolio Engineering” case study to the portfolio, based 
 - Do not infer any Nuex, Grounds, or game-project work from this repository's portfolio commits.
 
 ## Tech Stack
-Flutter Web / Dart using the existing project models, centralized `PortfolioData`, named route generation, and widget tests. No new dependency is planned.
+Flutter Web / Dart using the existing project models, project-specific data modules aggregated by `PortfolioData`, named route generation, and widget tests. No new dependency is planned.
 
 ## Commands
 - Focused tests: `flutter test test/portfolio_navigation_test.dart`
@@ -28,7 +28,7 @@ Flutter Web / Dart using the existing project models, centralized `PortfolioData
 - Web build: `flutter build web`
 
 ## Project Structure
-- `lib/features/portfolio/data/portfolio_data.dart`: new case-study content.
+- `lib/features/portfolio/data/portfolio_engineering_project_data.dart`: new case-study content, included in the `PortfolioData.projects` catalog.
 - `lib/features/portfolio/models/project_model.dart`: category/story navigation metadata if required.
 - `lib/features/portfolio/presentation/sections/projects_section.dart`: discoverable card/group rendering.
 - `lib/app.dart` and `lib/features/portfolio/presentation/pages/project_case_study_page.dart`: project/story routes and presentation.
@@ -36,7 +36,7 @@ Flutter Web / Dart using the existing project models, centralized `PortfolioData
 - `docs/PORTFOLIO_CONTENT.md`: private-to-repo evidence provenance and claim boundaries.
 
 ## Code Style
-Follow existing Flutter conventions: immutable `const` data models; keep content in `PortfolioData`; keep route/page rendering in presentation files; reuse existing layouts and avoid dependencies. Example:
+Follow existing Flutter conventions: immutable `const` data models; keep project-owned content in the portfolio data modules exposed through `PortfolioData`; keep route/page rendering in presentation files; reuse existing layouts and avoid dependencies. Example:
 
 ```dart
 EngineeringStory(

@@ -37,63 +37,22 @@ class EngineeringStory {
   final List<CaseStudySection> sections;
   final List<ProjectMedia> media;
   final String? subtitle;
-  final String? routeSlug;
-  final String? cardTitle;
-  final String? cardSummary;
+  final String routeSlug;
+  final String cardTitle;
+  final String cardSummary;
   const EngineeringStory(
     this.title,
     this.sections, {
+    required this.routeSlug,
+    required this.cardTitle,
+    required this.cardSummary,
     this.media = const [],
     this.subtitle,
-    this.routeSlug,
-    this.cardTitle,
-    this.cardSummary,
   });
-}
 
-extension EngineeringStoryNavigation on EngineeringStory {
-  String get slug {
-    if (routeSlug != null) return routeSlug!;
-    if (title.startsWith('Authentication')) return 'authentication';
-    if (title.startsWith('Extending')) return 'exercise-logging';
-    if (title.startsWith('App Update')) return 'app-update';
-    if (title.startsWith('Food logging')) return 'food-logging-reliability';
-    if (title.startsWith('Keep nutrition progress')) {
-      return 'nutrition-progress-history';
-    }
-    return 'production-debugging';
-  }
-
-  String get shortTitle {
-    if (cardTitle != null) return cardTitle!;
-    if (title.startsWith('Authentication'))
-      return 'Authentication & User State';
-    if (title.startsWith('Extending')) return 'Exercise Logging';
-    if (title.startsWith('App Update')) return 'App Update';
-    if (title.startsWith('Food logging')) return 'Food Search & Logging';
-    if (title.startsWith('Keep nutrition progress')) return 'Daily Progress';
-    return 'Production Debugging';
-  }
-
-  String get summary {
-    if (cardSummary != null) return cardSummary!;
-    if (title.startsWith('Authentication')) {
-      return 'Clarified authentication and user-state responsibilities, and improved readiness and controller lifecycle handling.';
-    }
-    if (title.startsWith('Extending')) {
-      return 'Supported exercise-specific measurements with value1/value2 while preserving historical weight/reps records.';
-    }
-    if (title.startsWith('App Update')) {
-      return 'Implemented update UI, models and dashboard integration, and refined dependency registration.';
-    }
-    if (title.startsWith('Food logging')) {
-      return 'Fixed a false empty search state and carried catalog or personal foods into portion-aware, transaction-safe meal logging.';
-    }
-    if (title.startsWith('Keep nutrition progress')) {
-      return 'Kept past-day goals separate from the profile default and tied live progress to saved meal data.';
-    }
-    return 'Strengthened lifecycle guards, asynchronous state handling and checks around production edge cases.';
-  }
+  String get slug => routeSlug;
+  String get shortTitle => cardTitle;
+  String get summary => cardSummary;
 }
 
 class ProjectVideo {

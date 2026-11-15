@@ -79,21 +79,21 @@ void main() {
       final projectEntry = find.text('Building this portfolio').first;
       await tester.ensureVisible(projectEntry);
       await tester.pumpAndSettle();
-      expect(find.text('Portfolio Engineering').first, findsOneWidget);
+      expect(find.text('SUPPORTING / PORTFOLIO ENGINEERING'), findsOneWidget);
       expect(projectEntry.hitTestable(), findsOneWidget);
       expect(tester.takeException(), isNull);
 
-      final openProject = find.text('Explore how I built this portfolio');
+      final openProject = find.text('Read portfolio case study  →');
       await tester.ensureVisible(openProject);
       await tester.tap(openProject);
       await tester.pumpAndSettle();
       expect(find.byType(ProjectCaseStudyPage), findsOneWidget);
-      expect(find.text('Role: Portfolio developer'), findsOneWidget);
-      expect(find.text('Responsive UI'), findsOneWidget);
-      expect(find.text('Cubit state'), findsOneWidget);
-      expect(find.text('Web delivery'), findsOneWidget);
+      expect(find.text('Portfolio developer'), findsWidgets);
+      expect(find.textContaining('Responsive UI'), findsWidgets);
+      expect(find.textContaining('Cubit state'), findsWidgets);
+      expect(find.textContaining('Web delivery'), findsWidgets);
 
-      final storyButton = find.text('Read Responsive UI');
+      final storyButton = find.textContaining('Open full story: Responsive UI');
       await tester.ensureVisible(storyButton);
       await tester.tap(storyButton);
       await tester.pumpAndSettle();

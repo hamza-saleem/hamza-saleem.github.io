@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:portfolio_website/app.dart';
 import 'package:portfolio_website/core/theme/cubit/theme_cubit.dart';
-import 'package:portfolio_website/features/portfolio/data/portfolio_data.dart';
 import 'package:portfolio_website/features/portfolio/models/project_model.dart';
 import 'package:portfolio_website/features/portfolio/presentation/pages/project_case_study_page.dart';
 import 'package:portfolio_website/features/portfolio/presentation/sections/projects_section.dart';
 import 'package:portfolio_website/features/portfolio/presentation/widgets/project_widgets.dart';
 
 void main() {
-  for (final width in [375.0, 768.0, 1440.0]) {
+  for (final width in [375.0, 768.0, 900.0, 1024.0, 1440.0]) {
     testWidgets('Track navigation and case studies at $width pixels', (
       tester,
     ) async {
@@ -25,42 +24,46 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text(PortfolioData.title), findsOneWidget);
-      await tester.tap(find.text('View Mobile Work'));
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Explore my work on Grounds').first);
-      await tester.pumpAndSettle();
+      expect(find.text('SOFTWARE ENGINEER · PAKISTAN'), findsOneWidget);
       expect(
-        find.text('Explore my work on Grounds').first.hitTestable(),
+        find.text('Mobile engineer.\nThoughtful systems,\ncarefully built.'),
         findsOneWidget,
       );
-      await tester.tap(find.text('Explore my work on Grounds').first);
+      await tester.tap(find.text('Explore mobile work  →'));
+      await tester.pumpAndSettle();
+      final portfolioContext = tester.element(find.byType(ProjectsSection));
+      Navigator.of(portfolioContext).pushNamed('/projects/grounds');
       await tester.pumpAndSettle();
       expect(find.byType(ProjectCaseStudyPage), findsOneWidget);
       expect(
-        find.text('Role: Flutter Developer / Development Team Member'),
+        find.text('Flutter Developer / Development Team Member'),
         findsOneWidget,
       );
-      expect(find.text('Architectural Direction'), findsNothing);
-      await tester.ensureVisible(find.text('Read Authentication & User State'));
-      await tester.tap(find.text('Read Authentication & User State'));
+      expect(find.text('Architectural Direction'), findsOneWidget);
+      final authenticationStory = find.textContaining(
+        'Open full story: Authentication & User State',
+      );
+      await tester.ensureVisible(authenticationStory);
+      await tester.tap(authenticationStory);
       await tester.pumpAndSettle();
       expect(find.byType(EngineeringStoryPage), findsOneWidget);
       expect(
         find.text('Authentication & User State Lifecycle Refactor'),
         findsOneWidget,
       );
-      await tester.tap(find.byTooltip('Back to Grounds'));
+      final backToGrounds = find.text('Back to Grounds');
+      await tester.ensureVisible(backToGrounds);
+      await tester.tap(backToGrounds);
       await tester.pumpAndSettle();
       expect(find.byType(ProjectCaseStudyPage), findsOneWidget);
-      await tester.tap(find.byTooltip('Back to portfolio'));
+      await tester.tap(find.widgetWithText(TextButton, 'Hamza Saleem').first);
       await tester.pumpAndSettle();
       final context = tester.element(find.byType(ProjectsSection));
       Navigator.of(context).pushNamed('/projects/shadow-hills-manor');
       await tester.pumpAndSettle();
       expect(
-        find.text('Role: Game Programmer / Development Team Member'),
-        findsOneWidget,
+        find.text('Game Programmer / Development Team Member'),
+        findsNWidgets(2),
       );
       expect(find.byType(ProjectTrailer), findsNWidgets(2));
       expect(find.byType(ProjectMediaView), findsNothing);
@@ -68,11 +71,15 @@ void main() {
       expect(find.text('Gameplay trailer'), findsOneWidget);
       expect(find.text('Know Buddy Games website'), findsOneWidget);
       expect(find.text('Know Buddy Games YouTube'), findsOneWidget);
-      await tester.tap(find.byTooltip('Toggle theme'));
+      final themeToggle = width < 600
+          ? find.byTooltip('Switch to light theme')
+          : find.bySemanticsLabel('Switch to light theme');
+      await tester.tap(themeToggle);
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
     });
   }
   testWidgets('Unavailable media falls back to an explicit placeholder', (

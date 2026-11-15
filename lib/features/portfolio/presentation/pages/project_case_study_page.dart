@@ -1,226 +1,212 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/cubit/theme_cubit.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/url_utils.dart';
 import '../../data/portfolio_data.dart';
 import '../../models/project_model.dart';
-import '../widgets/project_widgets.dart';
 import '../widgets/playable_game.dart';
-
-List<EngineeringStory> _orderedStories(ProjectModel project) =>
-    [...project.stories]..sort((a, b) {
-      if (a.title.startsWith('Authentication')) return -1;
-      if (b.title.startsWith('Authentication')) return 1;
-      return project.stories.indexOf(a).compareTo(project.stories.indexOf(b));
-    });
-
-void _back(BuildContext context, String fallback) {
-  if (Navigator.of(context).canPop()) {
-    Navigator.of(context).pop();
-  } else {
-    Navigator.of(context).pushReplacementNamed(fallback);
-  }
-}
-
-class _StudyLayout extends StatelessWidget {
-  final String title;
-  final String backLabel;
-  final String fallback;
-  final List<Widget> children;
-  const _StudyLayout({
-    required this.title,
-    required this.backLabel,
-    required this.fallback,
-    required this.children,
-  });
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      leading: IconButton(
-        tooltip: backLabel,
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => _back(context, fallback),
-      ),
-      title: Text(title),
-      actions: [
-        IconButton(
-          tooltip: 'Toggle theme',
-          onPressed: () => context.read<ThemeCubit>().toggleTheme(),
-          icon: const Icon(Icons.brightness_6_outlined),
-        ),
-      ],
-    ),
-    body: SingleChildScrollView(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 960),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: context.sectionPaddingH,
-              vertical: context.isMobile ? 32 : 48,
-            ),
-            child: SelectionArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: children,
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
+import '../widgets/project_widgets.dart';
+import 'case_study_overview.dart';
+import 'case_study_stories.dart';
+import 'study_layout.dart';
 
 class ProjectCaseStudyPage extends StatelessWidget {
   final ProjectModel project;
   const ProjectCaseStudyPage({super.key, required this.project});
+
   @override
-  Widget build(BuildContext context) => _StudyLayout(
-    title: project.title,
-    backLabel: 'Back to portfolio',
-    fallback: '/',
-    children: [
-      Text(project.trackLabel, style: AppTextStyles.label(context.accent)),
-      const SizedBox(height: 12),
-      Text(
-        project.title,
-        style: AppTextStyles.heading1(
-          context.textPrimary,
-          fontSize: context.isMobile ? 32 : 44,
+  Widget build(BuildContext context) {
+    final chapters = buildCaseStudyChapters(project);
+    final chapterKeys = List.generate(chapters.length, (_) => GlobalKey());
+    final contribution = project.sections.where(
+      (section) => section.title == 'My Contribution',
+    );
+    final reflection = project.sections.where(
+      (section) => section.title == 'What I Learned',
+    );
+
+    return StudyLayout(
+      children: [
+        CaseStudyIntroduction(project: project),
+        ContributionSummary(
+          project: project,
+          contribution: contribution.isEmpty ? null : contribution.first.body,
         ),
-      ),
-      const SizedBox(height: 16),
-      Text(
-        project.caseStudyIntro ?? project.description,
-        style: AppTextStyles.body(context.textSecondary),
-      ),
-      const SizedBox(height: 20),
-      Text('Role: ${project.role}', style: AppTextStyles.body(context.accent)),
-      Text(
-        project.context,
-        style: AppTextStyles.caption(context.textSecondary),
-      ),
-      const SizedBox(height: 12),
-      TechnologyTags(tags: project.tags),
-      const SizedBox(height: 12),
-      ProjectLinks(project: project),
-      const SizedBox(height: 28),
-      if (project.gameEmbedUrl != null) ...[
-        PlayableGame(
-          url: project.gameEmbedUrl!,
-          title: project.title,
-          pageUrl: project.externalLinks.first.url,
-        ),
-        const SizedBox(height: 24),
-      ],
-      for (final section in project.sections.where(
-        (s) => s.title == 'My Contribution',
-      ))
-        CaseStudyBlock(section: section),
-      if (project.supportsStoryNavigation) ...[
-        Text(
-          'Engineering stories',
-          style: AppTextStyles.heading2(context.textPrimary),
-        ),
-        const SizedBox(height: 16),
-        LayoutBuilder(
-          builder: (context, constraints) => Wrap(
+        if (chapters.isNotEmpty) ...[
+          CaseStudyStoryIndex(chapters: chapters, keys: chapterKeys),
+          for (final (index, chapter) in chapters.indexed)
+            CaseStudyChapterView(
+              key: chapterKeys[index],
+              project: project,
+              chapter: chapter,
+            ),
+        ],
+        for (final section in project.sections.where(
+          (section) =>
+              section.title != 'My Contribution' &&
+              section.title != 'What I Learned' &&
+              !(project.slug == 'grounds' && section.title == 'Constraints'),
+        ))
+          _StandaloneSection(section: section),
+        if (project.gameEmbedUrl != null) ...[
+          _MediaPageSection(
+            title: 'Play the game',
+            child: PlayableGame(
+              url: project.gameEmbedUrl!,
+              title: project.title,
+              pageUrl: project.externalLinks.first.url,
+            ),
+          ),
+          _MediaPageSection(
+            title: 'Gameplay screenshots',
+            child: ProjectMediaGallery(
+              media: project.media,
+              showFullMedia: true,
+            ),
+          ),
+        ],
+        if (project.videos.isNotEmpty)
+          _MediaPageSection(
+            title: 'Official trailers',
+            child: ProjectTrailerGallery(videos: project.videos),
+          ),
+        if (reflection.isNotEmpty)
+          _ReflectionSection(project: project, reflection: reflection.first),
+        if (project.slug == 'grounds') const _NextProjectSection(),
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: context.sectionPaddingH,
+            vertical: 32,
+          ),
+          child: Wrap(
             spacing: 16,
-            runSpacing: 16,
+            runSpacing: 8,
             children: [
-              for (final story in _orderedStories(project))
-                SizedBox(
-                  width: constraints.maxWidth < 650
-                      ? constraints.maxWidth
-                      : (constraints.maxWidth - 16) / 2,
-                  child: Card(
-                    margin: EdgeInsets.zero,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            story.shortTitle,
-                            style: AppTextStyles.heading2(
-                              context.textPrimary,
-                              fontSize: 20,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            story.summary,
-                            style: AppTextStyles.body(context.textSecondary),
-                          ),
-                          const SizedBox(height: 12),
-                          OutlinedButton(
-                            onPressed: () => Navigator.of(
-                              context,
-                            ).pushNamed('${project.route}/${story.slug}'),
-                            child: Text('Read ${story.shortTitle}'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              ProjectLinks(project: project),
+              TextButton(
+                onPressed: () => launchSafely('mailto:${PortfolioData.email}'),
+                child: const Text('Get in touch  →'),
+              ),
             ],
           ),
         ),
-        const SizedBox(height: 28),
-      ] else ...[
-        for (final section in project.sections.where(
-          (s) => s.title != 'My Contribution' && s.title != 'What I Learned',
-        ))
-          CaseStudyBlock(section: section),
-        for (final story in project.stories)
-          for (final section in story.sections)
-            CaseStudyBlock(section: section),
       ],
-      for (final section in project.sections.where(
-        (s) => s.title == 'What I Learned',
-      ))
-        CaseStudyBlock(section: section),
-      if (project.gameEmbedUrl != null) ...[
-        Text(
-          'Gameplay screenshots',
-          style: AppTextStyles.heading2(context.textPrimary),
-        ),
-        const SizedBox(height: 16),
-        ProjectMediaGallery(media: project.media),
-        const SizedBox(height: 24),
-      ],
-      if (project.videos.isNotEmpty) ...[
-        Text(
-          'Official trailers',
-          style: AppTextStyles.heading2(context.textPrimary),
-        ),
-        const SizedBox(height: 16),
-        ProjectTrailerGallery(videos: project.videos),
-        const SizedBox(height: 24),
-      ],
-      Wrap(
-        spacing: 12,
-        runSpacing: 8,
-        children: [
-          OutlinedButton(
-            onPressed: () => Navigator.of(
-              context,
-            ).pushNamedAndRemoveUntil('/', (_) => false),
-            child: const Text('Back to portfolio'),
-          ),
-          TextButton(
-            onPressed: () => launchSafely('mailto:${PortfolioData.email}'),
-            child: const Text('Get in touch'),
-          ),
-        ],
-      ),
-    ],
+    );
+  }
+}
+
+class _StandaloneSection extends StatelessWidget {
+  final CaseStudySection section;
+  const _StandaloneSection({required this.section});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.symmetric(
+      horizontal: context.sectionPaddingH,
+      vertical: 20,
+    ),
+    child: CaseStudyBlock(section: section),
   );
+}
+
+class _MediaPageSection extends StatelessWidget {
+  final String title;
+  final Widget child;
+  const _MediaPageSection({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.symmetric(
+      horizontal: context.sectionPaddingH,
+      vertical: 32,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppTextStyles.heading2(context.textPrimary, fontSize: 30),
+        ),
+        const SizedBox(height: 20),
+        child,
+      ],
+    ),
+  );
+}
+
+class _ReflectionSection extends StatelessWidget {
+  final ProjectModel project;
+  final CaseStudySection reflection;
+  const _ReflectionSection({required this.project, required this.reflection});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.symmetric(
+      horizontal: context.sectionPaddingH,
+      vertical: 48,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Divider(height: 1, color: context.ruleColor),
+        const SizedBox(height: 32),
+        Text('REFLECTION', style: AppTextStyles.label(context.accent)),
+        const SizedBox(height: 24),
+        Text(
+          project.slug == 'grounds'
+              ? 'State ownership is architecture.'
+              : 'What I learned.',
+          style: AppTextStyles.heading1(context.textPrimary, fontSize: 38),
+        ),
+        const SizedBox(height: 24),
+        Text(reflection.body, style: AppTextStyles.body(context.textSecondary)),
+      ],
+    ),
+  );
+}
+
+class _NextProjectSection extends StatelessWidget {
+  const _NextProjectSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final project = PortfolioData.projects.singleWhere(
+      (project) => project.slug == 'shadow-hills-manor',
+    );
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: context.sectionPaddingH,
+        vertical: 24,
+      ),
+      child: TextButton(
+        onPressed: () => Navigator.of(context).pushNamed(project.route),
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          alignment: Alignment.centerLeft,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'NEXT / COMPLEMENTARY GAME WORK',
+              style: AppTextStyles.label(context.accent).copyWith(fontSize: 10),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              project.title,
+              style: AppTextStyles.heading2(context.textPrimary, fontSize: 30),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              project.description,
+              style: AppTextStyles.caption(context.textSecondary),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class EngineeringStoryPage extends StatelessWidget {
@@ -231,59 +217,83 @@ class EngineeringStoryPage extends StatelessWidget {
     required this.project,
     required this.story,
   });
+
   @override
-  Widget build(BuildContext context) => _StudyLayout(
-    title: project.title,
-    backLabel: 'Back to ${project.title}',
-    fallback: project.route,
+  Widget build(BuildContext context) => StudyLayout(
     children: [
-      Text(
-        '${project.title} · Engineering story',
-        style: AppTextStyles.label(context.accent),
-      ),
-      const SizedBox(height: 16),
-      Text(
-        story.title,
-        style: AppTextStyles.heading1(
-          context.textPrimary,
-          fontSize: context.isMobile ? 28 : 36,
+      Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: context.sectionPaddingH,
+          vertical: context.responsive(
+            mobile: 56.0,
+            tablet: 56.0,
+            desktop: 88.0,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${project.title.toUpperCase()} / ENGINEERING STORY',
+              style: AppTextStyles.label(context.accent),
+            ),
+            const SizedBox(height: 28),
+            Text(
+              story.title,
+              style: AppTextStyles.heading1(
+                context.textPrimary,
+                fontSize: context.responsive(
+                  mobile: 32.0,
+                  tablet: 42.0,
+                  desktop: 56.0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              story.subtitle ?? story.summary,
+              style: AppTextStyles.body(context.textSecondary),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              '${project.role} · ${project.context}',
+              style: AppTextStyles.caption(context.textSecondary),
+            ),
+          ],
         ),
       ),
-      const SizedBox(height: 16),
-      Text(
-        story.subtitle ?? story.summary,
-        style: AppTextStyles.body(context.accent),
-      ),
-      const SizedBox(height: 28),
       for (final section in story.sections.where(
-        (s) => s.body.trim().isNotEmpty,
+        (section) => section.body.trim().isNotEmpty,
       ))
-        CaseStudyBlock(section: section),
-      if (story.media.isNotEmpty) ProjectMediaGallery(media: story.media),
-      const SizedBox(height: 24),
-      OutlinedButton(
-        onPressed: () =>
-            Navigator.of(context).pushReplacementNamed(project.route),
-        child: Text('Back to ${project.title}'),
-      ),
-      const SizedBox(height: 24),
-      Text(
-        'Other engineering stories',
-        style: AppTextStyles.heading2(context.textPrimary, fontSize: 20),
-      ),
-      const SizedBox(height: 12),
-      Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          for (final other in _orderedStories(project).where((s) => s != story))
+        _StandaloneSection(section: section),
+      if (story.media.isNotEmpty)
+        _MediaPageSection(
+          title: 'Supporting media',
+          child: ProjectMediaGallery(media: story.media, showFullMedia: true),
+        ),
+      Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: context.sectionPaddingH,
+          vertical: 24,
+        ),
+        child: Wrap(
+          spacing: 12,
+          runSpacing: 8,
+          children: [
             OutlinedButton(
-              onPressed: () => Navigator.of(
-                context,
-              ).pushReplacementNamed('${project.route}/${other.slug}'),
-              child: Text(other.shortTitle),
+              onPressed: () =>
+                  Navigator.of(context).pushReplacementNamed(project.route),
+              child: Text('Back to ${project.title}'),
             ),
-        ],
+            for (final other in project.stories.where((item) => item != story))
+              TextButton(
+                onPressed: () => Navigator.of(
+                  context,
+                ).pushReplacementNamed('${project.route}/${other.slug}'),
+                child: Text(other.shortTitle),
+              ),
+          ],
+        ),
       ),
     ],
   );

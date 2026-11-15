@@ -1,34 +1,168 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'app_spacing.dart';
 
 class AppTheme {
   AppTheme._();
 
-  static ThemeData dark() => ThemeData(
+  static ThemeData dark() => _build(
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: HamzaSaleemColors.darkBackground,
-    colorScheme: const ColorScheme.dark(
-      primary: HamzaSaleemColors.sand,
-      secondary: HamzaSaleemColors.sandHover,
-      surface: HamzaSaleemColors.darkSurface,
-      onSurface: HamzaSaleemColors.darkTextPrimary,
-    ),
-    dividerColor: HamzaSaleemColors.darkRule,
-    useMaterial3: true,
+    background: HamzaSaleemColors.darkBackground,
+    surface: HamzaSaleemColors.darkSurface,
+    card: HamzaSaleemColors.darkCard,
+    rule: HamzaSaleemColors.darkRule,
+    text: HamzaSaleemColors.darkTextPrimary,
+    secondaryText: HamzaSaleemColors.darkTextSecondary,
+    accent: HamzaSaleemColors.sand,
+    accentHover: HamzaSaleemColors.sandHover,
   );
 
-  static ThemeData light() => ThemeData(
+  static ThemeData light() => _build(
     brightness: Brightness.light,
-    scaffoldBackgroundColor: HamzaSaleemColors.lightBackground,
-    colorScheme: const ColorScheme.light(
-      primary: HamzaSaleemColors.sandDark,
-      secondary: HamzaSaleemColors.sandDarkHover,
-      surface: HamzaSaleemColors.lightSurface,
-      onSurface: HamzaSaleemColors.lightTextPrimary,
-    ),
-    dividerColor: HamzaSaleemColors.lightRule,
-    useMaterial3: true,
+    background: HamzaSaleemColors.lightBackground,
+    surface: HamzaSaleemColors.lightSurface,
+    card: HamzaSaleemColors.lightCard,
+    rule: HamzaSaleemColors.lightRule,
+    text: HamzaSaleemColors.lightTextPrimary,
+    secondaryText: HamzaSaleemColors.lightTextSecondary,
+    accent: HamzaSaleemColors.sandDark,
+    accentHover: HamzaSaleemColors.sandDarkHover,
   );
+
+  static ThemeData _build({
+    required Brightness brightness,
+    required Color background,
+    required Color surface,
+    required Color card,
+    required Color rule,
+    required Color text,
+    required Color secondaryText,
+    required Color accent,
+    required Color accentHover,
+  }) {
+    final dark = brightness == Brightness.dark;
+    final foreground = dark
+        ? HamzaSaleemColors.darkBackground
+        : HamzaSaleemColors.lightBackground;
+    final primaryButton = dark ? accent : text;
+    final buttonShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppRadii.tight),
+    );
+
+    return ThemeData(
+      brightness: brightness,
+      fontFamily: 'Poppins',
+      scaffoldBackgroundColor: background,
+      colorScheme: ColorScheme(
+        brightness: brightness,
+        primary: primaryButton,
+        onPrimary: foreground,
+        secondary: accentHover,
+        onSecondary: foreground,
+        error: dark ? const Color(0xFFFFB4AB) : const Color(0xFF8C1D18),
+        onError: dark ? const Color(0xFF690005) : Colors.white,
+        surface: surface,
+        onSurface: text,
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: background,
+        foregroundColor: text,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        titleTextStyle: TextStyle(
+          color: text,
+          fontFamily: 'Noto Serif JP',
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      dividerColor: rule,
+      focusColor: accent.withValues(alpha: 0.2),
+      hoverColor: accent.withValues(alpha: 0.08),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: accent,
+        selectionColor: accent.withValues(alpha: 0.25),
+        selectionHandleColor: accent,
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          ),
+          shape: WidgetStatePropertyAll(buttonShape),
+          foregroundColor: WidgetStatePropertyAll(foreground),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return accent.withValues(alpha: 0.35);
+            }
+            if (states.contains(WidgetState.hovered)) {
+              return dark ? accentHover : text.withValues(alpha: 0.88);
+            }
+            return primaryButton;
+          }),
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.focused)) {
+              return accent.withValues(alpha: 0.24);
+            }
+            if (states.contains(WidgetState.hovered)) {
+              return foreground.withValues(alpha: 0.08);
+            }
+            return null;
+          }),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          ),
+          shape: WidgetStatePropertyAll(buttonShape),
+          foregroundColor: WidgetStatePropertyAll(text),
+          side: WidgetStateProperty.resolveWith((states) {
+            return BorderSide(
+              color: states.contains(WidgetState.focused) ? accent : rule,
+              width: states.contains(WidgetState.focused) ? 2 : 1,
+            );
+          }),
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.focused) ||
+                states.contains(WidgetState.hovered)) {
+              return accent.withValues(alpha: 0.12);
+            }
+            return null;
+          }),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(Size(44, 44)),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          ),
+          foregroundColor: WidgetStatePropertyAll(text),
+          overlayColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.focused) ||
+                states.contains(WidgetState.hovered)) {
+              return accent.withValues(alpha: 0.12);
+            }
+            return null;
+          }),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: card,
+        side: BorderSide(color: rule),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadii.tight),
+        ),
+        labelStyle: TextStyle(color: secondaryText, fontFamily: 'Poppins'),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      ),
+      useMaterial3: true,
+    );
+  }
 }
 
 extension ThemeContext on BuildContext {

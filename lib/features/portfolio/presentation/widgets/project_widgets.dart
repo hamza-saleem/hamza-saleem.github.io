@@ -61,7 +61,12 @@ class ProjectLinks extends StatelessWidget {
 
 class ProjectMediaView extends StatelessWidget {
   final ProjectMedia media;
-  const ProjectMediaView({super.key, required this.media});
+  final bool showFullMedia;
+  const ProjectMediaView({
+    super.key,
+    required this.media,
+    this.showFullMedia = false,
+  });
   @override
   Widget build(BuildContext context) {
     Widget placeholder() => Container(
@@ -84,7 +89,7 @@ class ProjectMediaView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (media.focusLogging && media.asset != null) ...[
+        if (media.focusLogging && media.asset != null && !showFullMedia) ...[
           ClipRect(
             child: Align(
               alignment: const Alignment(0, 0.88),
@@ -127,7 +132,28 @@ class ProjectMediaView extends StatelessWidget {
               ),
             ),
           ),
-        ] else
+        ] else if (showFullMedia && media.focusLogging && media.asset != null)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth < 262
+                  ? constraints.maxWidth - 12
+                  : 250.0;
+              return Center(
+                child: SizedBox(
+                  width: width,
+                  child: AspectRatio(
+                    aspectRatio: media.aspectRatio,
+                    child: Image.asset(
+                      media.asset!,
+                      fit: BoxFit.contain,
+                      semanticLabel: media.alt,
+                    ),
+                  ),
+                ),
+              );
+            },
+          )
+        else
           AspectRatio(
             aspectRatio: media.aspectRatio,
             child: media.asset == null
@@ -190,21 +216,33 @@ class ProjectMediaView extends StatelessWidget {
 
 class ProjectMediaGallery extends StatelessWidget {
   final List<ProjectMedia> media;
-  const ProjectMediaGallery({super.key, required this.media});
+  final bool showFullMedia;
+  const ProjectMediaGallery({
+    super.key,
+    required this.media,
+    this.showFullMedia = false,
+  });
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
+      final spacing = constraints.maxWidth < 600 && showFullMedia ? 12.0 : 24.0;
       final width = constraints.maxWidth < 600
-          ? constraints.maxWidth
+          ? showFullMedia && media.length > 1
+                ? (constraints.maxWidth - spacing * (media.length - 1)) /
+                      media.length
+                : constraints.maxWidth
           : (constraints.maxWidth - 24) / 2;
       return Wrap(
-        spacing: 24,
+        spacing: spacing,
         runSpacing: 32,
         children: media
             .map(
               (item) => SizedBox(
                 width: width,
-                child: ProjectMediaView(media: item),
+                child: ProjectMediaView(
+                  media: item,
+                  showFullMedia: showFullMedia,
+                ),
               ),
             )
             .toList(),

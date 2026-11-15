@@ -1,198 +1,174 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/responsive.dart';
-import '../../../../core/utils/text_measurer.dart';
-import '../../../../core/utils/url_utils.dart';
-import '../../../../core/widgets/parallax_widget.dart';
-import '../../../../core/widgets/section_fade.dart';
-import '../../cubit/hero_cubit.dart';
 import '../../data/portfolio_data.dart';
 
-class HeroSection extends StatefulWidget {
-  final ScrollController scrollController;
+class HeroSection extends StatelessWidget {
   final VoidCallback onViewWork;
   final VoidCallback onContact;
-  final VoidCallback onViewGameWork;
 
   const HeroSection({
     super.key,
-    required this.scrollController,
     required this.onViewWork,
     required this.onContact,
-    required this.onViewGameWork,
   });
 
   @override
-  State<HeroSection> createState() => _HeroSectionState();
-}
-
-class _HeroSectionState extends State<HeroSection> {
-  late final HeroCubit _heroCubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _heroCubit = HeroCubit();
-    // Measure after the first frame so BuildContext has accurate layout info.
-    WidgetsBinding.instance.addPostFrameCallback((_) => _measureName());
-  }
-
-  Future<void> _measureName() async {
-    if (!mounted) return;
-    final fontSize = context.responsive<double>(
-      mobile: 36,
-      tablet: 48,
-      desktop: 56,
-    );
-    final result =
-        await TextMeasurer.measure(
-          text: PortfolioData.name,
-          font: '700 ${fontSize.toInt()}px "Noto Serif JP"',
-        ).timeout(
-          const Duration(seconds: 3),
-          onTimeout: () {
-            debugPrint(
-              '[HeroSection] Text measurement timed out — underline will not render.',
-            );
-            return null;
-          },
-        );
-    if (!mounted || result == null) return;
-    _heroCubit.setNameWidth(result.maxLineWidth);
-  }
-
-  @override
-  void dispose() {
-    _heroCubit.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final displaySize = context.responsive<double>(
-      mobile: 36,
-      tablet: 48,
-      desktop: 56,
-    );
-    final h1Size = context.responsive<double>(
-      mobile: 22,
-      tablet: 28,
-      desktop: 36,
-    );
-
-    return BlocProvider.value(
-      value: _heroCubit,
-      child: SectionFade(
-        child: ParallaxWidget(
-          scrollController: widget.scrollController,
-          parallaxStrength: 0.3,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: context.sectionPaddingH,
-              vertical: context.sectionPaddingV,
-            ),
-            child: Column(
+    final compact = context.screenWidth < 1440;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: context.sectionPaddingH,
+        vertical: context.responsive(mobile: 56.0, tablet: 56.0, desktop: 88.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'SOFTWARE ENGINEER · PAKISTAN',
+            style: AppTextStyles.label(context.accent).copyWith(fontSize: 11),
+          ),
+          const SizedBox(height: 28),
+          if (compact) ...[
+            _HeroIntroduction(onViewWork: onViewWork, onContact: onContact),
+            const SizedBox(height: 36),
+            const _PracticeNotes(),
+          ] else
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '// hello, world',
-                  style: AppTextStyles.label(context.accent),
-                ),
-                SizedBox(
-                  height: context.responsive(
-                    mobile: 12.0,
-                    tablet: 14.0,
-                    desktop: 16.0,
+                Expanded(
+                  child: _HeroIntroduction(
+                    onViewWork: onViewWork,
+                    onContact: onContact,
                   ),
                 ),
-                Text(
-                  PortfolioData.name,
-                  style: AppTextStyles.display(
-                    context.textPrimary,
-                    fontSize: displaySize,
-                  ),
-                ),
-                // Accent underline — width driven by HeroCubit measurement.
-                // Animates from 0 → measured width once fonts are ready.
-                BlocBuilder<HeroCubit, HeroState>(
-                  buildWhen: (previous, current) =>
-                      previous.nameWidth != current.nameWidth,
-                  builder: (context, heroState) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 600),
-                      curve: Curves.easeOut,
-                      width: heroState.nameWidth ?? 0,
-                      height: 2,
-                      margin: EdgeInsets.only(
-                        top: context.responsive(
-                          mobile: 8.0,
-                          tablet: 10.0,
-                          desktop: 12.0,
-                        ),
-                      ),
-                      color: context.accent,
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: context.responsive(
-                    mobile: 12.0,
-                    tablet: 14.0,
-                    desktop: 16.0,
-                  ),
-                ),
-                Text(
-                  PortfolioData.title,
-                  style: AppTextStyles.heading1(
-                    context.accent,
-                    fontSize: h1Size,
-                  ),
-                ),
-                SizedBox(
-                  height: context.responsive(
-                    mobile: 20.0,
-                    tablet: 24.0,
-                    desktop: 32.0,
-                  ),
-                ),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 560),
-                  child: Text(
-                    PortfolioData.tagline,
-                    style: AppTextStyles.body(context.textSecondary),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 12,
-                  children: [
-                    FilledButton(
-                      onPressed: widget.onViewWork,
-                      child: const Text('View Mobile Work'),
-                    ),
-                    OutlinedButton(
-                      onPressed: widget.onViewGameWork,
-                      child: const Text('View Game Work'),
-                    ),
-                    if (PortfolioData.resumeUrl != null)
-                      OutlinedButton(
-                        onPressed: () => launchSafely(PortfolioData.resumeUrl!),
-                        child: const Text('Resume'),
-                      ),
-                    TextButton(
-                      onPressed: widget.onContact,
-                      child: const Text('Get in Touch'),
-                    ),
-                  ],
-                ),
+                const SizedBox(width: 80),
+                const SizedBox(width: 348, child: _PracticeNotes()),
               ],
             ),
+          const SizedBox(height: 28),
+          Text(
+            'BASED IN PAKISTAN  /  OPEN TO RELOCATION TO JAPAN & INTERNATIONAL OPPORTUNITIES',
+            style: AppTextStyles.caption(
+              context.textSecondary,
+            ).copyWith(fontSize: 10, letterSpacing: 0.2),
           ),
-        ),
+        ],
       ),
     );
   }
+}
+
+class _HeroIntroduction extends StatelessWidget {
+  final VoidCallback onViewWork;
+  final VoidCallback onContact;
+
+  const _HeroIntroduction({required this.onViewWork, required this.onContact});
+
+  @override
+  Widget build(BuildContext context) {
+    final displaySize = context.responsive(
+      mobile: 48.0,
+      tablet: 70.0,
+      desktop: 96.0,
+    );
+    final focusSize = context.responsive(
+      mobile: 33.0,
+      tablet: 40.0,
+      desktop: 48.0,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          PortfolioData.name,
+          style: AppTextStyles.display(
+            context.textPrimary,
+            fontSize: displaySize,
+          ).copyWith(height: 1.2),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Mobile engineer.\nThoughtful systems,\ncarefully built.',
+          style: AppTextStyles.heading1(
+            context.textPrimary,
+            fontSize: focusSize,
+          ).copyWith(height: 1.2),
+        ),
+        const SizedBox(height: 24),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 820),
+          child: Text(
+            'I build and improve Flutter applications. Alongside my mobile work, '
+            'I contribute to games in Unreal Engine and Unity.',
+            style: AppTextStyles.body(
+              context.textSecondary,
+            ).copyWith(fontSize: context.isDesktop ? 17 : 15, height: 1.55),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            FilledButton(
+              onPressed: onViewWork,
+              child: const Text('Explore mobile work  →'),
+            ),
+            FilledButton(
+              onPressed: onContact,
+              style: FilledButton.styleFrom(
+                backgroundColor: context.surfaceColor,
+                foregroundColor: context.textPrimary,
+              ),
+              child: const Text('Get in touch  →'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _PracticeNotes extends StatelessWidget {
+  const _PracticeNotes();
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text('01 / PRIMARY PRACTICE', style: AppTextStyles.label(context.accent)),
+      const SizedBox(height: 24),
+      Text(
+        'Flutter & Dart',
+        style: AppTextStyles.heading2(context.textPrimary, fontSize: 22),
+      ),
+      const SizedBox(height: 16),
+      Text(
+        'Production mobile apps\nState management\nDebugging & reliability',
+        style: AppTextStyles.caption(
+          context.textSecondary,
+        ).copyWith(fontSize: 13, height: 1.55),
+      ),
+      const SizedBox(height: 22),
+      Divider(height: 1, color: context.ruleColor),
+      const SizedBox(height: 22),
+      Text('02 / COMPLEMENTARY', style: AppTextStyles.label(context.accent)),
+      const SizedBox(height: 24),
+      Text(
+        'Games & systems',
+        style: AppTextStyles.heading2(context.textPrimary, fontSize: 22),
+      ),
+      const SizedBox(height: 16),
+      Text(
+        'Unreal Engine · Unity\nProgramming · Design · Production',
+        style: AppTextStyles.caption(
+          context.textSecondary,
+        ).copyWith(fontSize: 13, height: 1.55),
+      ),
+    ],
+  );
 }
